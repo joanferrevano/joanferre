@@ -282,6 +282,15 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .row--3 { grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4.4fr); }
 .row--3 .row__desc { font-size: var(--fs-body); color: var(--charcoal); }
 .row--3 .row__wide { grid-column: 2 / -1; }
+.row__wide > * + * { margin-top: var(--s-3); }
+.row__facts { display: grid; gap: var(--s-1); font-size: var(--fs-small); color: var(--stone); }
+.row__list { display: grid; gap: var(--s-2); font-size: var(--fs-small); }
+.row__list li { position: relative; padding-left: 1.125rem; }
+.row__list li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 0.5rem; height: 1px; background: var(--line-strong); }
+/* Entrada de menor peso visual (formación previa) */
+.row--minor { padding-block: var(--s-5); }
+.row--minor .row__name { font-size: var(--fs-body); font-weight: 500; font-family: var(--font-text); letter-spacing: 0; }
+.row--minor .row__desc { font-size: var(--fs-small); color: var(--stone); }
 .row--3 .row__tech { grid-column: 1 / -1; }
 .rows .row h3, .rows .row h4 { margin: 0; }
 

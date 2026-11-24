@@ -12,7 +12,9 @@ Sitio estático (HTML + CSS + JS sin dependencias ni build). Sistema visual «Ma
 | `batoilogic.html` | Ficha del proyecto BatoiLOGIC |
 | `about.html` | Sobre mí |
 | `contact.html` | Contacto (formulario Formspree) |
-| `youtube.html` | Página heredada del diseño anterior. No está enlazada y conserva sus CSS/JS antiguos (`css/style.css`, `components.css`, `pages.css`, `animations.css`, `js/main.js`, `js/nav.js`) |
+| `youtube.html` | Solo redirige a la portada (meta refresh + JS) para no romper enlaces antiguos. Su contenido anterior está en el historial de git |
+
+Recursos del diseño anterior que ya no usa ninguna página (conservados, pendientes de decidir si se archivan): `css/style.css`, `components.css`, `pages.css`, `animations.css`, `js/main.js`, `js/nav.js` e `images/thumbnails/`.
 
 Todas las rutas son **relativas** (sin `/` inicial) para funcionar tanto en `usuario.github.io` como en `usuario.github.io/repo/`.
 
