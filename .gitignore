@@ -1,2 +1,6 @@
 # Ignorar Claude
 .claude
+# Muestras de desarrollo: no forman parte de la versión publicable
+preview-dev/
+# Capturas de revisión local
+.review/

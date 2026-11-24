@@ -3,323 +3,140 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio de vídeo — Joan Ferre Vañó</title>
-  <meta name="description"
-    content="Portfolio de editor de vídeo. Reels, talking heads, edits de montaje, videoclips y storytelling." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/pages.css" />
-  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edición de vídeo — Joan Ferre</title>
+  <meta name="description" content="Edición de vídeo de Joan Ferre: edits y piezas audiovisuales." />
+  <meta name="theme-color" content="#FAF7F2" />
+  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/marfil.css" />
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () {
+      if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
+    }, 3000);
+  </script>
 </head>
 
-<body class="page-enter">
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="navbar" id="navbar">
-    <div class="navbar__inner">
-      <a href="index.html" class="navbar__logo">Joan Ferre</a>
-      <nav class="navbar__nav">
-        <a href="index.html" class="navbar__link">Inicio</a>
-        <a href="video.html" class="navbar__link">Vídeo</a>
-        <a href="dev.html" class="navbar__link">Dev</a>
-        <a href="about.html" class="navbar__link">Sobre mí</a>
-        <a href="contact.html" class="navbar__link">Contacto</a>
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="wordmark" href="index.html" aria-label="Joan Ferre, inicio">Joan Ferre</a>
+      <nav class="nav" aria-label="Principal">
+        <a href="dev.html">Programación</a>
+        <a href="video.html" aria-current="page">Edición</a>
+        <a href="about.html">Sobre mí</a>
+        <a href="contact.html" class="nav__contact">Contacto</a>
       </nav>
-      <button class="navbar__burger" id="nav-burger" aria-label="Abrir menú">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </header>
-  <div class="nav-mobile" id="nav-mobile">
-    <a href="index.html">Inicio</a>
-    <a href="video.html">Vídeo</a>
-    <a href="dev.html">Dev</a>
-    <a href="about.html">Sobre mí</a>
-    <a href="contact.html">Contacto</a>
-  </div>
 
-  <main>
-    <!-- ── HERO ────────────────────────────────────────────── -->
-    <section class="hero hero--left hero--video">
-      <div class="container">
-        <div class="hero__inner">
-          <span class="hero__eyebrow hero-reveal">Editor de vídeo · Portfolio</span>
-          <h1 class="hero__title hero-reveal glow-pulse">
-            Piezas que<br /><em>hablan por sí solas.</em>
-          </h1>
-          <p class="hero__sub hero-reveal">
-            Cada proyecto aquí tiene un cliente-tipo. Videoclips, reels, edits, talking heads.
-            El trabajo que demuestra de qué soy capaz.
-          </p>
-          <div class="hero__ctas hero-reveal">
-            <a href="youtube.html" class="btn btn--white btn--lg">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path
-                  d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5a3 3 0 0 0-2.1 2.1C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
-              </svg>
-              Ver canal de YouTube
-            </a>
-            <a href="contact.html" class="btn btn--outline btn--lg">Contactar</a>
-          </div>
-        </div>
-      </div>
-      <span class="hero__bg-text" aria-hidden="true">01</span>
-    </section>
+  <main id="contenido">
 
-    <!-- ── HERRAMIENTAS ─────────────────────────────────────── -->
-    <section class="section" style="padding-top: var(--sp-xl); padding-bottom: var(--sp-xl);">
-      <div class="container">
-        <div class="tools-section reveal" style="margin-top:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--sp-md);max-width:860px">
-          <div class="tools-group" style="margin-bottom:0">
-            <p class="tools-group__title">Edición de vídeo</p>
-            <div class="tools-row">
-              <span class="tool-chip">CapCut</span>
-              <span class="tool-chip">DaVinci Resolve <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Adobe Premiere Pro <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-            </div>
-          </div>
-          <div class="tools-group" style="margin-bottom:0">
-            <p class="tools-group__title">Color grading</p>
-            <div class="tools-row">
-              <span class="tool-chip">Corrección de color <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">LUTs personalizados <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Look cinematográfico <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-            </div>
-          </div>
-          <div class="tools-group" style="margin-bottom:0">
-            <p class="tools-group__title">Diseño de audio</p>
-            <div class="tools-row">
-              <span class="tool-chip">Mezcla de audio <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Reducción de ruido <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Sincronización música/vídeo <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-            </div>
-          </div>
-          <div class="tools-group" style="margin-bottom:0">
-            <p class="tools-group__title">Motion graphics</p>
-            <div class="tools-row">
-              <span class="tool-chip">Subtítulos animados <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Transiciones personalizadas <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">After Effects <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-            </div>
-          </div>
-          <div class="tools-group" style="margin-bottom:0">
-            <p class="tools-group__title">Diseño y miniaturas</p>
-            <div class="tools-row">
-              <span class="tool-chip">Canva</span>
-              <span class="tool-chip">Adobe Photoshop <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-              <span class="tool-chip">Composición visual <span style="font-size:0.6rem;color:var(--text-3);margin-left:2px">(aprendiendo)</span></span>
-            </div>
-          </div>
-        </div>
+    <!-- ── PRESENTACIÓN DEL ÁREA ────────────────────────────── -->
+    <section class="page-head">
+      <div class="wrap">
+        <span class="eyebrow rise">Área</span>
+        <h1 class="rise rise--2">Edición de vídeo</h1>
+        <p class="lead rise rise--3">Cuento historias reales.</p>
       </div>
     </section>
 
-    <!-- ── SHOWREEL con trazo neon animado ─────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="section__head reveal">
-          <span class="label">Showreel</span>
-          <h2>Lo mejor está por llegar.</h2>
+    <!-- ── PIEZAS ───────────────────────────────────────────────
+         ESTRUCTURA LISTA, SIN PIEZAS PUBLICADAS TODAVÍA.
+         Los edits de Alemania existen (publicados en TikTok) pero faltan
+         sus enlaces y datos. No se publican tarjetas vacías: cuando haya
+         material real, pegar aquí un <section> con el contenido de abajo.
+         El componente está probado visualmente en preview-dev/ (carpeta
+         local, ignorada por git).
+
+    <section class="section--tight" aria-label="Piezas">
+      <div class="wrap">
+        <div class="pieces">
+
+          <!- - Pieza HORIZONTAL (16:9). Para otra proporción: style="--ratio: 4 / 5" en .piece__stage - ->
+          <article class="piece piece--h reveal">
+            <div class="piece__stage">
+              <a class="video-facade" href="https://www.youtube.com/watch?v=ID_DE_YOUTUBE"
+                 data-video-id="ID_DE_YOUTUBE" data-title="TÍTULO DE LA PIEZA">
+                <img src="images/video/POSTER.jpg" alt="" loading="lazy" />   <!- - opcional, fotograma elegido por Joan - ->
+                <span class="video-facade__play" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                </span>
+                <span class="sr-only">Reproducir vídeo: TÍTULO DE LA PIEZA</span>
+              </a>
+            </div>
+            <div class="piece__body">
+              <div class="piece__head">
+                <h2 class="piece__title">TÍTULO DE LA PIEZA</h2>
+                <p class="muted">Breve contexto.</p>
+              </div>
+              <dl class="piece__facts">
+                <div><dt class="eyebrow">Mi trabajo</dt><dd>Qué hice yo.</dd></div>
+                <div><dt class="eyebrow">Herramientas</dt><dd>Solo las confirmadas.</dd></div>   <!- - omitir si no hay datos - ->
+              </dl>
+            </div>
+          </article>
+
+          <!- - Pieza VERTICAL (9:16): usar class="piece piece--v"; el escenario se hace estrecho y el texto va al lado - ->
+
         </div>
-        <div class="showreel-placeholder neon-trace reveal">
-          <div>
-            <p class="showreel-placeholder__title">Showreel — Verano 2026</p>
-            <p class="showreel-placeholder__sub">En producción. Mientras tanto, el canal tiene 287 vídeos.</p>
-          </div>
-          <a href="https://www.youtube.com/@joanferreyt" class="btn btn--outline" target="_blank" rel="noopener">
-            Ver el canal completo
+      </div>
+    </section>
+    -->
+
+    <section class="section--tight" aria-label="Contacto para proyectos de vídeo">
+      <div class="wrap">
+        <p class="reveal">¿Tienes un proyecto de vídeo? Cuéntamelo.</p>
+        <p class="reveal" style="margin-top: var(--s-5)"><a class="btn" href="contact.html">Escribirme</a></p>
+      </div>
+    </section>
+
+    <!-- ── PUENTE A PROGRAMACIÓN ────────────────────────────── -->
+    <section class="section--tight" aria-label="Otra área">
+      <div class="wrap">
+        <div class="areas">
+          <a class="area" href="dev.html">
+            <span class="area__name">También programo</span>
+            <span class="area__desc">Programación</span>
+            <span class="area__arrow" aria-hidden="true">→</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- ── PORTFOLIO DE PIEZAS ───────────────────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="section__head reveal">
-          <span class="label">Portfolio · Piezas</span>
-          <h2>El trabajo.</h2>
-        </div>
-        <div class="portfolio-grid stagger">
-
-          <!-- PIEZA 1: Reel / TikTok -->
-          <div class="portfolio-card portfolio-card--pending">
-            <div class="portfolio-card__thumb">
-              <div class="portfolio-card__overlay">
-                <span class="portfolio-card__type">Reel / TikTok</span>
-              </div>
-              <div class="portfolio-card__placeholder" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <p class="portfolio-card__client">Para: marcas, negocios locales, e-commerce</p>
-              <h3 class="portfolio-card__title">Reel de producto / contenido social</h3>
-              <p class="portfolio-card__desc">Corte rápido, ritmo ajustado a la música, formato vertical 9:16. Pensado para captar atención en los primeros 3 segundos.</p>
-              <span class="badge badge--dim portfolio-card__status">Próximamente</span>
-            </div>
-          </div>
-
-          <!-- PIEZA 2: Talking head / entrevista -->
-          <div class="portfolio-card portfolio-card--pending">
-            <div class="portfolio-card__thumb">
-              <div class="portfolio-card__overlay">
-                <span class="portfolio-card__type">Talking Head</span>
-              </div>
-              <div class="portfolio-card__placeholder" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <p class="portfolio-card__client">Para: coaches, consultores, corporativo</p>
-              <h3 class="portfolio-card__title">Entrevista / presentación a cámara</h3>
-              <p class="portfolio-card__desc">Persona hablando a cámara con edición limpia: subtítulos, cortes de respiración, cutaways y color grading neutro profesional.</p>
-              <span class="badge badge--dim portfolio-card__status">Próximamente</span>
-            </div>
-          </div>
-
-          <!-- PIEZA 3: Edit de montaje -->
-          <div class="portfolio-card portfolio-card--pending">
-            <div class="portfolio-card__thumb">
-              <div class="portfolio-card__overlay">
-                <span class="portfolio-card__type">Edit / Montaje</span>
-              </div>
-              <div class="portfolio-card__placeholder" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <p class="portfolio-card__client">Para: lifestyle, viaje, eventos, agencias</p>
-              <h3 class="portfolio-card__title">Montaje rítmico con música</h3>
-              <p class="portfolio-card__desc">Edit de planos sincronizado al beat: cuts en tiempo, color grading cinematográfico, motion graphics simples. Alta energía visual.</p>
-              <span class="badge badge--dim portfolio-card__status">Próximamente</span>
-            </div>
-          </div>
-
-          <!-- PIEZA 4: Videoclip / spot de marca -->
-          <div class="portfolio-card portfolio-card--pending">
-            <div class="portfolio-card__thumb">
-              <div class="portfolio-card__overlay">
-                <span class="portfolio-card__type">Videoclip / Spot</span>
-              </div>
-              <div class="portfolio-card__placeholder" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <p class="portfolio-card__client">Para: artistas, marcas aspiracionales</p>
-              <h3 class="portfolio-card__title">Videoclip o spot de marca</h3>
-              <p class="portfolio-card__desc">Narrativa visual con dirección de arte, movimientos de cámara, corrección de color creativa. La pieza que más dice sobre el criterio del editor.</p>
-              <span class="badge badge--dim portfolio-card__status">Próximamente</span>
-            </div>
-          </div>
-
-          <!-- PIEZA 5: Corto / storytelling -->
-          <div class="portfolio-card portfolio-card--pending">
-            <div class="portfolio-card__thumb">
-              <div class="portfolio-card__overlay">
-                <span class="portfolio-card__type">Corto / Storytelling</span>
-              </div>
-              <div class="portfolio-card__placeholder" aria-hidden="true">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <p class="portfolio-card__client">Para: diferenciador creativo, nivel alto</p>
-              <h3 class="portfolio-card__title">Pieza narrativa / documental corto</h3>
-              <p class="portfolio-card__desc">Historia estructurada con arco narrativo claro. Demuestra que sé contar, no solo cortar. La pieza que separa un editor de un montador.</p>
-              <span class="badge badge--dim portfolio-card__status">Próximamente</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── CANAL DE YOUTUBE (sub-página) ───────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="section__head reveal">
-          <span class="label">Canal de YouTube</span>
-          <h2>El contenido real.</h2>
-        </div>
-        <div class="reveal" style="margin-bottom:var(--sp-xl)">
-          <a href="youtube.html" class="project-card card card-has-sweep"
-            style="display:flex;flex-direction:column;gap:var(--sp-sm);text-decoration:none">
-            <div class="project-card__top">
-              <span class="project-card__name" style="font-size:var(--s-2xl)">@joanferreyt</span>
-              <span class="badge badge--dim">YouTube</span>
-            </div>
-            <p class="project-card__desc" style="max-width:65ch">
-              Mentalidad, crecimiento personal, vida real sin filtros. Documentando el proceso desde 2022. Aquí están los vídeos destacados, las stats y todas las redes.
-            </p>
-            <span class="project-card__link">
-              Ver canal completo
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </span>
-          </a>
-        </div>
-
-        <!-- Stats debajo de la tarjeta -->
-        <div class="stats-row stagger reveal">
-          <div class="stat-item">
-            <span class="stat-item__num">287</span>
-            <span class="stat-item__label" style="font-size:0.85rem">vídeos publicados</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-item__num">2.140</span>
-            <span class="stat-item__label" style="font-size:0.85rem">suscriptores en YouTube</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-item__num">76.1K</span>
-            <span class="stat-item__label" style="font-size:0.85rem">visualizaciones TikTok viral</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-item__num">233K</span>
-            <span class="stat-item__label" style="font-size:0.85rem">visualizaciones totales</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── CTA FINAL ────────────────────────────────────────── -->
-    <section class="section" style="text-align:center">
-      <div class="container container--xs">
-        <div class="reveal" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-          <a href="contact.html" class="btn btn--white btn--lg">Contratar para un proyecto</a>
-          <a href="youtube.html" class="btn btn--ghost btn--lg">Ver canal de YouTube →</a>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__inner">
-        <span class="footer__copy">© <span class="footer__year">2026</span> Joan Ferre Vañó</span>
-        <nav class="footer__links">
-          <a href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="mailto:joanferrecontact@gmail.com">Email</a>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="site-footer__top">
+        <h2 class="site-footer__title">¿Tienes algo en mente?</h2>
+        <div class="site-footer__contact">
+          <a class="site-footer__mail" href="mailto:joanferrecontact@gmail.com">joanferrecontact@gmail.com</a>
+          <ul class="site-footer__links">
+            <li><a class="link" href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="link" href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="link" href="contact.html">Formulario de contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <span>© <span data-year>2026</span> Joan Ferre Vañó</span>
+        <nav aria-label="Pie">
+          <a class="link" href="index.html">Inicio</a>
+          <a class="link" href="dev.html">Programación</a>
+          <a class="link" href="about.html">Sobre mí</a>
         </nav>
       </div>
     </div>
   </footer>
 
-  <script src="js/nav.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/marfil.js"></script>
 </body>
 
 </html>

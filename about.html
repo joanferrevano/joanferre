@@ -3,211 +3,151 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sobre mí — Joan Ferre Vañó</title>
-  <meta name="description" content="La historia real de Joan Ferre Vañó. De 2020 hasta hoy." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/pages.css" />
-  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre mí — Joan Ferre</title>
+  <meta name="description" content="Joan Ferre Vañó. Programador y editor de vídeo de Banyeres de Mariola, Alicante." />
+  <meta name="theme-color" content="#FAF7F2" />
+  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/marfil.css" />
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () {
+      if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
+    }, 3000);
+  </script>
 </head>
 
-<body class="page-enter">
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="navbar" id="navbar">
-    <div class="navbar__inner">
-      <a href="index.html" class="navbar__logo">Joan Ferre</a>
-      <nav class="navbar__nav">
-        <a href="index.html" class="navbar__link">Inicio</a>
-        <a href="video.html" class="navbar__link">Vídeo</a>
-        <a href="dev.html" class="navbar__link">Dev</a>
-        <a href="about.html" class="navbar__link">Sobre mí</a>
-        <a href="contact.html" class="navbar__link">Contacto</a>
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="wordmark" href="index.html" aria-label="Joan Ferre, inicio">Joan Ferre</a>
+      <nav class="nav" aria-label="Principal">
+        <a href="dev.html">Programación</a>
+        <a href="video.html">Edición</a>
+        <a href="about.html" aria-current="page">Sobre mí</a>
+        <a href="contact.html" class="nav__contact">Contacto</a>
       </nav>
-      <button class="navbar__burger" id="nav-burger" aria-label="Abrir menú">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </header>
-  <div class="nav-mobile" id="nav-mobile">
-    <a href="index.html">Inicio</a>
-    <a href="video.html">Vídeo</a>
-    <a href="dev.html">Dev</a>
-    <a href="about.html">Sobre mí</a>
-    <a href="contact.html">Contacto</a>
-  </div>
 
-  <main>
-    <!-- ── HERO ─────────────────────────────────────────────── -->
-    <section class="hero">
-      <div class="container container--sm">
-        <div class="hero__inner">
-          <span class="hero__eyebrow hero-reveal">Banyeres de Mariola, Alicante (España)</span>
-          <h1 class="hero__title hero-reveal glow-pulse">
-            Empecé en<br /><em>el peor momento.</em>
-          </h1>
-          <p class="hero__sub hero-reveal">
-            En 2020 estaba en el fondo. Sin amigos, sin dirección, con la autoestima en el suelo.
-            Eso fue lo mejor que me pudo pasar.
-          </p>
-        </div>
+  <main id="contenido">
+
+    <section class="page-head">
+      <div class="wrap">
+        <span class="eyebrow rise">Sobre mí</span>
+        <h1 class="rise rise--2">Joan Ferre Vañó</h1>
+        <p class="lead rise rise--3">Programador y editor de vídeo, de Banyeres de Mariola (Alicante).</p>
       </div>
     </section>
 
-    <!-- ── HISTORIA ──────────────────────────────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="about-grid">
-
-          <!-- Foto con trazo neon animado -->
-          <div class="about-photo neon-trace reveal">
-            <div class="about-photo__placeholder" aria-hidden="true">JFV</div>
-            <img src="images/profile.jpg" alt="Joan Ferre Vañó" loading="lazy"
-              onerror="this.style.display='none'" />
-          </div>
-
-          <div class="reveal reveal--delay">
-            <span class="label">La historia</span>
-            <h2 style="margin-bottom:var(--sp-lg)">De 2020<br />hasta hoy.</h2>
-
-            <p style="margin-bottom:var(--sp-md)">La pandemia me dejó solo con mis pensamientos. Buenas notas, pero vida
-              social y física en cero. Me veía feo, era tímido y no sabía quién quería ser.</p>
-            <p style="margin-bottom:var(--sp-md)">En cuarto de la ESO empecé a cambiar. Construí mi grupo de amigos
-              actual, empecé a cuidarme físicamente y entendí que el crecimiento personal hay que decidirlo.</p>
-            <p>El 5 de diciembre de 2022 subí mi primer vídeo a YouTube. Cuatro intentos fallidos sobre trading. En
-              julio subí el primero real: mi cambio físico y proceso personal. Ahí empezó todo.</p>
-
-            <!-- Cita destacada con shimmer plateado -->
-            <div class="blockquote">
-              <p class="shimmer-text">"Soy muy friki en lo informático, pero muy abierto socialmente. Por eso todo lo
-                que hago une las dos cosas."</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── TIMELINE 2020→2026 ────────────────────────────────── -->
-    <section class="section">
-      <div class="container container--sm">
-        <div class="section__head reveal">
-          <span class="label">Timeline</span>
-          <h2>2020 → 2026</h2>
-        </div>
-
-        <!-- La línea crece hacia abajo con scaleY al hacerse visible -->
-        <div class="timeline-wrap">
-          <div class="timeline-line"></div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2020 — Cuarentena / ESO</p>
-            <p class="tl-text">El peor momento. Pandemia, sin amigos, autoestima bajo cero. Buenos resultados académicos
-              pero vida social y física en cero. El punto de inflexión que lo cambió todo.</p>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2021 — 4º ESO</p>
-            <p class="tl-text">Primer cambio real. Construyo el grupo de amigos que tengo hoy. Primer glowup físico.
-              Empiezo a centrarme en crecer, sin documentarlo todavía. Solo viviendo.</p>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2022 — Bachiller · 5 dic: primer vídeo</p>
-            <p class="tl-text">Creo el canal de YouTube. Cuatro vídeos sobre trading que no funcionan. En julio subo el
-              primero real: mi cambio físico y proceso personal. Ahí empieza todo de verdad.</p>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2023 — Empieza DAM</p>
-            <p class="tl-text">Inicio el Ciclo Superior de DAM. Descubro que programar me ayuda en el día a día:
-              organizar fotos, automatizar edición, scripts de vídeo. La pasión por el código y la edición crecen en
-              paralelo. Hago vlogs y videoclips con amigos.</p>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2024 – 2025 — Primer vídeo viral</p>
-            <p class="tl-text">Subo contenido sobre mi vida real: rupturas, disciplina, timidez, relaciones, rutinas. El
-              vídeo sobre la evolución de mi grupo de amigos alcanza 76.100 visualizaciones en TikTok. 287 vídeos
-              publicados.</p>
-          </div>
-
-          <!-- Año 2026 con glow dorado especial -->
-          <div class="tl-item tl-item--current">
-            <div class="tl-dot"></div>
-            <p class="tl-year">2026 — Titulación DAM · Ciclo de Edición</p>
-            <p class="tl-text">Me titulo en DAM. Decido estudiar Ciclo Superior de Edición de Vídeo para profesionalizar
-              mi mayor pasión. Más constante y consciente que nunca en redes. El proceso sigue.</p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── PRÓXIMOS PASOS ────────────────────────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="section__head reveal">
-          <span class="label">Lo que viene</span>
-          <h2>Próximos pasos</h2>
-        </div>
-        <div class="next-steps stagger">
-          <div class="next-step">
-            <div class="next-step__num">01</div>
-            <p class="next-step__text">Ciclo Superior de Edición de Vídeo para profesionalizar la pasión.</p>
-          </div>
-          <div class="next-step">
-            <div class="next-step__num">02</div>
-            <p class="next-step__text">Showreel profesional — verano 2026. Lo mejor del trabajo, en un vídeo.</p>
-          </div>
-          <div class="next-step">
-            <div class="next-step__num">03</div>
-            <p class="next-step__text">Seguir documentando el proceso en redes. Más constante. Más consciente.</p>
+    <!-- Cita propia, tomada de la versión anterior de la web -->
+    <section class="section--tight">
+      <div class="wrap">
+        <div class="split reveal">
+          <span class="eyebrow">Cómo lo veo</span>
+          <div class="split__body">
+            <p class="quote">“Soy muy friki en lo informático, pero muy abierto socialmente. Por eso todo lo que hago une las dos cosas.”</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── CTA ──────────────────────────────────────────────── -->
-    <section class="section" style="text-align:center">
-      <div class="container container--xs">
-        <div class="reveal" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-          <a href="contact.html" class="btn btn--white btn--lg">Escribirme</a>
-          <a href="video.html" class="btn btn--ghost btn--lg">Ver mi trabajo</a>
+    <!-- Trayectoria: solo datos confirmados. Fechas, funciones y tecnologías, pendientes. -->
+    <section class="section" aria-labelledby="trayectoria">
+      <div class="wrap">
+        <div class="split">
+          <h2 class="eyebrow" id="trayectoria">Trayectoria</h2>
+          <div class="split__body">
+            <ul class="rows">
+              <li class="row row--3">
+                <span class="eyebrow">Actualmente</span>
+                <h3 class="row__name">Ondulados de Papel</h3>
+                <p class="row__desc">Programador</p>
+              </li>
+              <li class="row row--3">
+                <span class="eyebrow">Prácticas</span>
+                <h3 class="row__name">ARQU</h3>
+                <p class="row__desc">Estudiante en prácticas</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
+
+    <!-- Formación: tomada de la versión anterior; sin fechas hasta reconfirmarlas. -->
+    <section class="section" aria-labelledby="formacion">
+      <div class="wrap">
+        <div class="split">
+          <h2 class="eyebrow" id="formacion">Formación</h2>
+          <div class="split__body">
+            <ul class="rows">
+              <li class="row row--3">
+                <span class="eyebrow">Ciclo superior</span>
+                <h3 class="row__name">CIPFP Batoi</h3>
+                <p class="row__desc">Desarrollo de Aplicaciones Multiplataforma (DAM). Proyecto final: <a class="link" href="batoilogic.html">BatoiLOGIC</a>.</p>
+              </li>
+              <li class="row row--3">
+                <span class="eyebrow">Idiomas</span>
+                <h3 class="row__name">Inglés</h3>
+                <p class="row__desc">B1, Cambridge University Press.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section--tight" aria-label="Áreas">
+      <div class="wrap">
+        <div class="areas">
+          <a class="area" href="dev.html">
+            <span class="area__name">Programación</span>
+            <span class="area__desc">Proyectos y stack</span>
+            <span class="area__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="area" href="video.html">
+            <span class="area__name">Edición de vídeo</span>
+            <span class="area__desc">Edits y piezas audiovisuales</span>
+            <span class="area__arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__inner">
-        <span class="footer__copy">© <span class="footer__year">2026</span> Joan Ferre Vañó</span>
-        <nav class="footer__links">
-          <a href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="mailto:joanferrecontact@gmail.com">Email</a>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="site-footer__top">
+        <h2 class="site-footer__title">¿Tienes algo en mente?</h2>
+        <div class="site-footer__contact">
+          <a class="site-footer__mail" href="mailto:joanferrecontact@gmail.com">joanferrecontact@gmail.com</a>
+          <ul class="site-footer__links">
+            <li><a class="link" href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="link" href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="link" href="contact.html">Formulario de contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <span>© <span data-year>2026</span> Joan Ferre Vañó</span>
+        <nav aria-label="Pie">
+          <a class="link" href="index.html">Inicio</a>
+          <a class="link" href="dev.html">Programación</a>
+          <a class="link" href="video.html">Edición</a>
         </nav>
       </div>
     </div>
   </footer>
 
-  <script src="js/nav.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/marfil.js"></script>
 </body>
 
 </html>

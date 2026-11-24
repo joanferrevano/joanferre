@@ -3,261 +3,138 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Joan Ferre Vañó — Portfolio</title>
-  <meta name="description"
-    content="Editor de vídeo y desarrollador de software. Banyeres de Mariola, Alicante (España)." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/pages.css" />
-  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Joan Ferre — Programador y editor de vídeo</title>
+  <meta name="description" content="Joan Ferre Vañó. Programador y editor de vídeo. Banyeres de Mariola, Alicante (España)." />
+  <meta name="theme-color" content="#FAF7F2" />
+  <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/marfil.css" />
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () {
+      if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
+    }, 3000);
+  </script>
 </head>
 
-<body class="page-enter">
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <!-- ── NAVBAR ─────────────────────────────────────────────── -->
-  <header class="navbar" id="navbar">
-    <div class="navbar__inner">
-      <a href="index.html" class="navbar__logo">Joan Ferre</a>
-      <nav class="navbar__nav">
-        <a href="index.html" class="navbar__link">Inicio</a>
-        <a href="video.html" class="navbar__link">Vídeo</a>
-        <a href="dev.html" class="navbar__link">Dev</a>
-        <a href="about.html" class="navbar__link">Sobre mí</a>
-        <a href="contact.html" class="navbar__link">Contacto</a>
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="wordmark" href="index.html" aria-label="Joan Ferre, inicio">Joan Ferre</a>
+      <nav class="nav" aria-label="Principal">
+        <a href="dev.html">Programación</a>
+        <a href="video.html">Edición</a>
+        <a href="about.html">Sobre mí</a>
+        <a href="contact.html" class="nav__contact">Contacto</a>
       </nav>
-      <button class="navbar__burger" id="nav-burger" aria-label="Abrir menú">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </header>
-  <div class="nav-mobile" id="nav-mobile">
-    <a href="index.html">Inicio</a>
-    <a href="video.html">Vídeo</a>
-    <a href="dev.html">Dev</a>
-    <a href="about.html">Sobre mí</a>
-    <a href="contact.html">Contacto</a>
-  </div>
 
-  <main>
-    <!-- ── HERO ─────────────────────────────────────────────── -->
-    <section class="hero hero--left">
-      <div class="container">
-        <div class="hero__inner">
-          <span class="hero__eyebrow hero-reveal">Banyeres de Mariola · Alicante (España)</span>
+  <main id="contenido">
 
-          <!-- Nombre con glow pulsante blanco intenso -->
-          <h1 class="hero__title hero-reveal glow-pulse">Joan Ferre Vañó</h1>
-
-          <!-- Tagline con shimmer dorado/plateado -->
-          <p class="hero-reveal"
-            style="font-family:var(--font-display);font-size:clamp(1.1rem,2.5vw,1.6rem);margin-bottom:var(--sp-md)">
-            <span class="shimmer-text">Editor de vídeo &amp; Desarrollador de software</span>
-          </p>
-
-          <p class="hero__sub hero-reveal">
-            Cuento historias reales. También las programo.
-          </p>
-          <div class="hero__ctas hero-reveal">
-            <a href="video.html" class="btn btn--white btn--lg">Ver trabajo de vídeo</a>
-            <a href="dev.html" class="btn btn--outline btn--lg">Proyectos de código</a>
-            <a href="about.html" class="btn btn--ghost">Sobre mí</a>
-            <a href="contact.html" class="btn btn--ghost">Contacto</a>
+    <!-- ── PRESENTACIÓN ─────────────────────────────────────── -->
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="hero__title rise">Joan Ferre<span class="dot">.</span></h1>
+        <div class="hero__grid">
+          <p class="lead hero__role rise rise--2">Programador y editor de vídeo.</p>
+          <div class="hero__aside rise rise--3">
+            <p>Cuento historias reales. También las programo.</p>
+            <p class="eyebrow">Banyeres de Mariola · Alicante</p>
           </div>
         </div>
       </div>
-      <span class="hero__bg-text" aria-hidden="true">JFV</span>
     </section>
 
-    <!-- ── BLOQUES PRINCIPALES ─────────────────────────────── -->
-    <section class="section">
-      <div class="container">
-        <div class="index-blocks stagger reveal">
-          <!-- Bloque vídeo con borde neon que se enciende -->
-          <a href="video.html" class="index-block">
-            <span class="index-block__num" aria-hidden="true">01</span>
-            <span class="index-block__label">Proyectos</span>
-            <h2 class="index-block__title">Edición<br />de vídeo</h2>
-            <span class="index-block__arrow">
-              Ver trabajo
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </span>
+    <!-- ── ACCESO A LAS DOS ÁREAS ───────────────────────────── -->
+    <section aria-label="Áreas de trabajo">
+      <div class="wrap">
+        <div class="areas reveal">
+          <a class="area" href="dev.html">
+            <span class="area__name">Programación</span>
+            <span class="area__desc">Aplicaciones móviles, APIs, herramientas de escritorio y scripts.</span>
+            <span class="area__arrow" aria-hidden="true">→</span>
           </a>
-          <!-- Bloque dev con borde neon que se enciende -->
-          <a href="dev.html" class="index-block">
-            <span class="index-block__num" aria-hidden="true">02</span>
-            <span class="index-block__label">Desarrollo de software</span>
-            <h2 class="index-block__title">Proyectos<br />de código</h2>
-            <span class="index-block__arrow">
-              Ver proyectos
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </span>
+          <a class="area" href="video.html">
+            <span class="area__name">Edición de vídeo</span>
+            <span class="area__desc">Edits y piezas audiovisuales.</span>
+            <span class="area__arrow" aria-hidden="true">→</span>
           </a>
         </div>
-
-        <!-- Stats con glow que se intensifica al hover -->
-        <div class="index-stats reveal">
-          <div class="index-stat">
-            <span class="index-stat__num">287</span>
-            <span class="index-stat__label">vídeos publicados</span>
-          </div>
-          <div class="index-stat">
-            <span class="index-stat__num">2.140</span>
-            <span class="index-stat__label">suscriptores</span>
-          </div>
-          <div class="index-stat">
-            <span class="index-stat__num">233K</span>
-            <span class="index-stat__label">visualizaciones</span>
-          </div>
-          <div class="index-stat">
-            <span class="index-stat__num">15</span>
-            <span class="index-stat__label">proyectos en GitHub</span>
-          </div>
-        </div>
       </div>
     </section>
 
-    <!-- ── EXPERIENCIA ───────────────────────────────────────── -->
+    <!-- ── MUESTRA DE TRABAJO ───────────────────────────────────
+         Hoy solo hay material incorporado de Programación.
+         Cuando exista la primera pieza de Edición, añadir aquí un
+         segundo destacado con el componente .piece (ver video.html). -->
     <section class="section">
-      <div class="container container--sm">
-        <div class="section__head reveal">
-          <span class="label">Trayectoria profesional</span>
-          <h2>Experiencia</h2>
-        </div>
-        <div class="timeline-wrap reveal">
-          <div class="timeline-line"></div>
-          <div class="tl-item tl-item--current">
-            <div class="tl-dot"></div>
-            <span class="tl-year">Mar 2026 – Jun 2026</span>
-            <div class="card card-has-sweep tl-card">
-              <h3 class="tl-card__company">ARQU</h3>
-              <p class="tl-card__role">Estudiante en Prácticas · Desarrollo y Automatización Odoo</p>
-              <p class="tl-card__meta">
-                <span>4 meses</span>
-                <span>Banyeres de Mariola</span>
-                <span>Híbrido</span>
-              </p>
-              <p class="tl-card__desc">Automatización de procesos empresariales con Odoo. Configuración de flujos de trabajo, automatizaciones internas, recordatorios automáticos para clientes e implementación de módulos personalizados.</p>
-              <div class="tl-card__badges">
-                <span class="badge badge--dim">Odoo</span>
-                <span class="badge badge--dim">Automatización</span>
-                <span class="badge badge--dim">ERP</span>
-                <span class="badge badge--dim">Python</span>
-              </div>
+      <div class="wrap">
+        <article class="feature reveal">
+          <div class="feature__side">
+            <span class="eyebrow">Proyecto destacado</span>
+            <span class="meta">Programación</span>
+          </div>
+          <div class="feature__main">
+            <h2>BatoiLOGIC</h2>
+            <p>Sistema de gestión logística completo: dos apps móviles, API REST, backoffice Windows con reconocimiento de voz, módulos Odoo personalizados y una herramienta de línea de comandos para importar y exportar datos.</p>
+            <p class="feature__stack">Flutter · Spring Boot · C# · Python / Odoo · Java · PostgreSQL · AWS EC2</p>
+            <div class="feature__actions">
+              <a class="link-arrow" href="batoilogic.html"><span>Ver el proyecto</span><span class="arrow" aria-hidden="true">→</span></a>
+              <a class="link" href="dev.html">Más proyectos</a>
             </div>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── CONTEXTO PROFESIONAL ─────────────────────────────── -->
+    <section class="section--tight" aria-label="Contexto profesional">
+      <div class="wrap">
+        <div class="context reveal">
+          <span class="eyebrow">Ahora</span>
+          <p class="context__text">
+            <span>Programador en Ondulados de Papel.</span>
+            <span class="muted">Prácticas en ARQU.</span>
+          </p>
+          <a class="link-arrow" href="about.html"><span>Sobre mí</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
 
-    <!-- ── EDUCACIÓN ──────────────────────────────────────────── -->
-    <section class="section">
-      <div class="container container--sm">
-        <div class="section__head reveal">
-          <span class="label">Formación académica</span>
-          <h2>Educación</h2>
-        </div>
-        <div class="timeline-wrap stagger reveal">
-          <div class="timeline-line"></div>
-
-          <div class="tl-item tl-item--current">
-            <div class="tl-dot"></div>
-            <span class="tl-year">2023 – 2026</span>
-            <div class="card card-has-sweep tl-card">
-              <h3 class="tl-card__company">CIPFP Batoi</h3>
-              <p class="tl-card__role">Técnico Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)</p>
-              <p class="tl-card__meta">
-                <span>Alcoy</span>
-                <span>Proyecto final: BatoiLOGIC</span>
-              </p>
-              <p class="tl-card__desc">Ciclo formativo de grado superior con especialización en desarrollo móvil (Flutter), backend con Spring Boot y Java, bases de datos PostgreSQL y MySQL, despliegue en AWS EC2 e integración con Odoo.</p>
-              <a href="batoilogic.html" class="project-card__link" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:var(--s-sm);color:var(--text-2);margin-bottom:var(--sp-sm);transition:color 0.2s,gap 0.3s var(--ease)">
-                Ver proyecto BatoiLOGIC
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
-              </a>
-              <div class="tl-card__badges">
-                <span class="badge badge--dim">Flutter</span>
-                <span class="badge badge--dim">Spring Boot</span>
-                <span class="badge badge--dim">AWS EC2</span>
-                <span class="badge badge--dim">Odoo</span>
-                <span class="badge badge--dim">Python</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <span class="tl-year">2021 – 2023</span>
-            <div class="card card-has-sweep tl-card">
-              <h3 class="tl-card__company">IES Manuel Broseta</h3>
-              <p class="tl-card__role">Bachillerato Científico</p>
-            </div>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <span class="tl-year">Feb 2024</span>
-            <div class="card card-has-sweep tl-card">
-              <h3 class="tl-card__company">Cambridge University Press</h3>
-              <p class="tl-card__role">B1 Inglés</p>
-              <div class="tl-card__badges" style="margin-top:var(--sp-sm)">
-                <span class="badge badge--dim">English B1</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── CTA FINAL ────────────────────────────────────────── -->
-    <section class="section" style="text-align:center">
-      <div class="container container--sm">
-        <div class="section__head reveal">
-          <span class="label">¿Trabajamos juntos?</span>
-          <h2>Cuéntame tu proyecto.</h2>
-        </div>
-        <div class="reveal" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-          <a href="contact.html" class="btn btn--white btn--lg">Contactar</a>
-          <a href="about.html" class="btn btn--ghost btn--lg">Conocerme mejor</a>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__inner">
-        <span class="footer__copy">© <span class="footer__year">2026</span> Joan Ferre Vañó</span>
-        <nav class="footer__links">
-          <a href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="mailto:joanferrecontact@gmail.com">Email</a>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="site-footer__top">
+        <h2 class="site-footer__title">¿Tienes algo en mente?</h2>
+        <div class="site-footer__contact">
+          <a class="site-footer__mail" href="mailto:joanferrecontact@gmail.com">joanferrecontact@gmail.com</a>
+          <ul class="site-footer__links">
+            <li><a class="link" href="https://github.com/joanferrevano" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="link" href="https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="link" href="contact.html">Formulario de contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <span>© <span data-year>2026</span> Joan Ferre Vañó</span>
+        <nav aria-label="Pie">
+          <a class="link" href="dev.html">Programación</a>
+          <a class="link" href="video.html">Edición</a>
+          <a class="link" href="about.html">Sobre mí</a>
         </nav>
       </div>
     </div>
   </footer>
 
-  <script src="js/nav.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/marfil.js"></script>
 </body>
 
 </html>

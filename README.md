@@ -1,138 +1,35 @@
-# Joan Ferrer — Portfolio
+# Joan Ferre — Portfolio
 
-Portfolio personal de editor de vídeo y desarrollador.
-Desplegado en GitHub Pages: `https://joanferreyt.github.io`
+Sitio estático (HTML + CSS + JS sin dependencias ni build). Sistema visual «Marfil».
 
----
+## Páginas
 
-## Estructura del proyecto
+| Archivo | Papel |
+|---|---|
+| `index.html` | Portada: presentación, acceso a las dos áreas, proyecto destacado, contexto profesional |
+| `dev.html` | Área de Programación |
+| `video.html` | Área de Edición de vídeo |
+| `batoilogic.html` | Ficha del proyecto BatoiLOGIC |
+| `about.html` | Sobre mí |
+| `contact.html` | Contacto (formulario Formspree) |
+| `youtube.html` | Página heredada del diseño anterior. No está enlazada y conserva sus CSS/JS antiguos (`css/style.css`, `components.css`, `pages.css`, `animations.css`, `js/main.js`, `js/nav.js`) |
 
-```
-portfolio/
-├── index.html          # Página principal
-├── css/
-│   └── style.css       # Estilos — diseño cinematográfico oscuro
-├── js/
-│   └── main.js         # Interacciones: modal reel, filtros, reveal
-├── assets/             # Imágenes, thumbnails, foto de perfil
-│   └── (vacío — añade tus archivos aquí)
-└── README.md
-```
+Todas las rutas son **relativas** (sin `/` inicial) para funcionar tanto en `usuario.github.io` como en `usuario.github.io/repo/`.
 
----
+## Sistema visual
 
-## Configuración inicial — GitHub Pages
+- `css/marfil.css`: tokens (color, tipografía, espaciado, anchos, radios, movimiento) al inicio del archivo y componentes después.
+- `js/marfil.js`: año del pie, revelado suave, vídeo bajo demanda y formulario de contacto.
+- `fonts/`: Bricolage Grotesque e Inter (autoalojadas, licencia SIL OFL; los textos de licencia están en la misma carpeta).
 
-### 1. Crear el repositorio en GitHub
+## Revisar en local
 
-1. Ve a [github.com/new](https://github.com/new)
-2. Nombre del repositorio: **`joanferreyt.github.io`**
-   - Debe ser exactamente `<tu-usuario>.github.io`
-3. Público ✓ (necesario para GitHub Pages gratuito)
-4. **Sin** inicializar con README (ya tienes el tuyo)
-5. Clic en **Create repository**
+Abre `index.html` directamente en el navegador (no hace falta servidor). `preview-dev/` (ignorada por git) contiene una muestra del componente de vídeo con marcadores.
 
-### 2. Conectar y subir el código
+## Añadir una pieza de vídeo
 
-```bash
-# Dentro de la carpeta del portfolio:
-git remote add origin https://github.com/joanferreyt/joanferreyt.github.io.git
-git push -u origin main
-```
-
-### 3. Activar GitHub Pages
-
-1. Ve a tu repositorio → **Settings** → **Pages**
-2. Source: **Deploy from a branch**
-3. Branch: `main` / `/ (root)`
-4. Clic en **Save**
-
-En 1–2 minutos estará en vivo en `https://joanferreyt.github.io`
-
----
-
-## Personalización
-
-### Añadir tu reel de YouTube/Vimeo
-
-En `index.html`, busca el `<iframe id="reelIframe">` y cambia el `data-src`:
-
-```html
-<!-- YouTube -->
-data-src="https://www.youtube.com/embed/TU_VIDEO_ID?autoplay=1&rel=0"
-
-<!-- Vimeo -->
-data-src="https://player.vimeo.com/video/TU_VIDEO_ID?autoplay=1"
-```
-
-### Añadir tu foto
-
-Coloca tu foto en `assets/foto.jpg` y en `index.html` reemplaza el bloque `.about-photo-placeholder` por:
-
-```html
-<img src="assets/foto.jpg" alt="Joan Ferrer" class="about-photo">
-```
-
-Y añade al CSS:
-```css
-.about-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  border-radius: 2px;
-}
-```
-
-### Añadir thumbnails de vídeo
-
-Coloca los JPG en `assets/` y añade el `<img>` dentro de cada `.vcard-thumb`:
-
-```html
-<img src="assets/thumb-mi-video.jpg" alt="Descripción del vídeo" loading="lazy">
-```
-
-### Cambiar email y links
-
-Busca y reemplaza en `index.html`:
-- `tu@email.com` → tu email real
-- `joanferreyt` → tu usuario real de GitHub/YouTube/TikTok
-
----
-
-## Workflow de Git — commits organizados
-
-```bash
-# Commit inicial (ya hecho)
-git commit -m "feat: estructura base del portfolio"
-
-# Después de añadir tu reel:
-git commit -m "feat(hero): añadir link al showreel"
-
-# Después de añadir thumbnails:
-git commit -m "feat(video): thumbnails para proyectos de vídeo"
-
-# Después de personalizar textos:
-git commit -m "content: textos y links personalizados"
-
-# Subir cambios:
-git push
-```
-
-Los cambios en GitHub Pages se despliegan automáticamente tras cada push (1–2 min).
-
----
-
-## Tecnologías
-
-- HTML5 semántico
-- CSS puro con custom properties (sin framework)
-- Vanilla JS (sin dependencias)
-- Google Fonts: Playfair Display + DM Sans + DM Mono
-- GitHub Pages para el despliegue
-
----
-
-Hecho con código, tijeras de edición y demasiado café.
+En `video.html` hay una plantilla comentada (`<!-- PIEZAS ... -->`). Al tener enlace y datos reales:
+1. Sube el vídeo a YouTube (en oculto) y copia su ID.
+2. Descomenta la sección y rellena ID, título, contexto, «Mi trabajo» y, solo si están confirmadas, «Herramientas».
+3. Formato: `piece--h` (horizontal, 16:9) o `piece--v` (vertical, 9:16); para otra proporción, `style="--ratio: 4 / 5"` en `.piece__stage`. El vídeo no se recorta.
+4. El reproductor (`youtube-nocookie.com`) solo se carga al pulsar; sin JS el enlace abre YouTube.
