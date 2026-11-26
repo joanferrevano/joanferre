@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/marfil.css" />
   <script>
     document.documentElement.classList.add('js');
+    try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);

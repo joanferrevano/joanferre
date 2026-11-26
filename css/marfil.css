@@ -78,6 +78,34 @@
   --dur:  220ms;
 }
 
+/* ── Tema oscuro («Marfil de noche») ─────────────────────────────
+   Mismos tokens con otros valores. El bloque está repetido a propósito:
+   el primero sigue al sistema (funciona sin JS) y el segundo es la
+   elección manual. Si cambias un valor, cámbialo en los dos.
+   Solo en pantalla: al imprimir se usa siempre el tema claro. */
+:root { color-scheme: light; }
+
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ivory: #1A1714; --bone: #231F1B; --sand: #2E2924;
+    --line: #3A342E;  --line-strong: #7D746A;
+    --charcoal: #F1ECE4; --stone: #B8AFA3;
+    --clay: #E08A66; --clay-deep: #EDA27F;
+    --error: #F2968F; --ok: #8FC9A0;
+  }
+}
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ivory: #1A1714; --bone: #231F1B; --sand: #2E2924;
+    --line: #3A342E;  --line-strong: #7D746A;
+    --charcoal: #F1ECE4; --stone: #B8AFA3;
+    --clay: #E08A66; --clay-deep: #EDA27F;
+    --error: #F2968F; --ok: #8FC9A0;
+  }
+}
+
 /* ── Reset y base ────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
@@ -424,6 +452,47 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .js .reveal.is-in { opacity: 1; transform: none; }
 .reveal-fallback .reveal { opacity: 1 !important; transform: none !important; }
 
+/* ── Cambio de tema ──────────────────────────────────────────── */
+/* El botón lo inserta marfil.js: sin JS no aparece. */
+.site-header__inner { position: relative; }
+.nav { margin-left: auto; }
+.theme-toggle {
+  display: grid; place-items: center; flex: none;
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  background: transparent; border: 1px solid var(--line-strong); border-radius: var(--r-s);
+}
+.theme-toggle svg { transition: transform var(--dur) var(--ease); }
+.theme-toggle[aria-pressed="true"] svg { transform: rotate(180deg); }
+/* fundido entre temas (View Transitions) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 320ms; }
+/* durante el cambio, que ningún color se anime por su cuenta */
+.theme-switching *, .theme-switching *::before, .theme-switching *::after { transition: none !important; }
+
+/* ── Copiar correo ───────────────────────────────────────────── */
+.mail-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3); }
+.copy-btn {
+  display: inline-grid; align-items: center; justify-items: center;
+  min-height: 2.75rem; padding: 0.5rem 1rem;
+  background: transparent; border: 1px solid var(--line-strong); border-radius: var(--r-s);
+  font-size: var(--fs-small); font-weight: 500;
+  transition: background-color var(--dur), border-color var(--dur);
+}
+/* los tres textos ocupan la misma celda: el botón no cambia de tamaño */
+.copy-btn__state {
+  grid-area: 1 / 1; display: inline-flex; align-items: center; gap: var(--s-2);
+  visibility: hidden; opacity: 0; transform: translateY(6px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility var(--dur);
+}
+.copy-btn[data-state="idle"] .copy-btn__state--idle,
+.copy-btn[data-state="ok"] .copy-btn__state--ok,
+.copy-btn[data-state="error"] .copy-btn__state--error { visibility: visible; opacity: 1; transform: none; }
+.copy-btn[data-state="ok"] { border-color: var(--ok); color: var(--ok); }
+.copy-btn[data-state="error"] { border-color: var(--error); color: var(--error); }
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover, .copy-btn:hover { background: var(--sand); }
+}
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 960px) {
   /* Las rejillas de 12 columnas pasan a una sola: así no dependen de la suma de huecos */
@@ -453,7 +522,8 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   /* Cabecera en dos líneas, sin menú desplegable ni JS: la navegación siempre está a la vista */
   .site-header { position: static; }
   .site-header__inner { flex-direction: column; align-items: flex-start; gap: var(--s-2); padding-block: var(--s-4) var(--s-3); }
-  .nav { flex-wrap: wrap; gap: var(--s-1) var(--s-4); width: 100%; }
+  .nav { flex-wrap: wrap; gap: var(--s-1) var(--s-4); width: 100%; margin-left: 0; }
+  .theme-toggle { position: absolute; top: var(--s-3); right: var(--gutter); }
   .nav a { padding-block: var(--s-3); font-size: 0.875rem; }
   .nav__contact { padding: 0.5rem 0.75rem; }
   html { scroll-padding-top: 1rem; }

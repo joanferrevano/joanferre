@@ -174,7 +174,9 @@ Una única hoja. Todo el diseño parte de los **tokens de `:root`** (líneas ~34
 | `--clay-deep` | `#8C3B1F` | Acento en hover (botones, enlaces) |
 | `--error` / `--ok` | `#B3261E` / `#2F6B3F` | Avisos del formulario |
 
-Contrastes **calculados con fórmula WCAG** (no con herramienta externa), que cumplen AA para texto: carbón/marfil 15,14:1; carbón/hueso 13,75; gris/marfil 6,74; gris/hueso 6,13; gris/arena 5,55; arcilla/marfil 5,31; arcilla/hueso 4,83 (el más ajustado); arcilla oscura/marfil 7,12; marfil/carbón 15,14; borde de control 3,58:1. Si cambias un color, recalcula estas combinaciones.
+**Tema oscuro («Marfil de noche»)**, aprobado el 26-11-2026. Mismos tokens con otros valores: `--ivory #1A1714`, `--bone #231F1B`, `--sand #2E2924`, `--line #3A342E`, `--line-strong #7D746A`, `--charcoal #F1ECE4`, `--stone #B8AFA3`, `--clay #E08A66`, `--clay-deep #EDA27F`, `--error #F2968F`, `--ok #8FC9A0`. Los nombres describen el papel en el tema claro (`--charcoal` es «texto», `--ivory` es «fondo»). El bloque está **repetido dos veces** en `marfil.css` (sistema y elección manual): cambia ambos. Solo se aplica en pantalla. Contrastes calculados sobre `--ivory`/`--bone`/`--sand`: texto y acentos entre 5,48:1 y 15,18:1; borde de control entre 3,14:1 y 3,89:1.
+
+Contrastes del tema claro **calculados con fórmula WCAG** (no con herramienta externa), que cumplen AA para texto: carbón/marfil 15,14:1; carbón/hueso 13,75; gris/marfil 6,74; gris/hueso 6,13; gris/arena 5,55; arcilla/marfil 5,31; arcilla/hueso 4,83 (el más ajustado); arcilla oscura/marfil 7,12; marfil/carbón 15,14; borde de control 3,58:1. Si cambias un color, recalcula estas combinaciones.
 
 ### Tipografía
 
@@ -236,13 +238,19 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
    - El `<form>` no tiene atributo `action`: sin JS no se puede enviar (hay un `<noscript>` con el correo directo).
    - **Nunca envíes el formulario real para probar.**
 
+6. **Tema claro/oscuro:** inserta `.theme-toggle` en `.site-header__inner`. Sin elección guardada sigue a `prefers-color-scheme`; la elección se guarda en `localStorage` (`jfv_theme`) solo si difiere del sistema. Actualiza `theme-color` y funde con View Transitions (salvo movimiento reducido o sin soporte).
+7. **Copiar correo:** envuelve cada `.site-footer__mail` / `.contact-mail` en `.mail-copy` y añade `.copy-btn` (estados `idle`/`ok`/`error` y aviso para lectores de pantalla).
+8. **Hora local:** «Banyeres de Mariola, HH:MM» (`Europe/Madrid`) en `.site-footer__bottom`.
+
+Los controles de 6 a 8 se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
+
 ### Script inline del `<head>` y degradación
 
-Cada página incluye un `<script>` en el `<head>` que añade la clase `js` a `<html>` y, tras 3 s, añade `reveal-fallback` si `data-ready` no se ha puesto (por si `marfil.js` falla): esa clase fuerza `.reveal` a visible. Resultado: **el contenido principal siempre se ve**, con o sin JS.
+Cada página incluye un `<script>` en el `<head>` que añade la clase `js` a `<html>`, aplica el tema guardado (`data-theme`, antes de pintar para evitar destellos) y, tras 3 s, añade `reveal-fallback` si `data-ready` no se ha puesto (por si `marfil.js` falla): esa clase fuerza `.reveal` a visible. Resultado: **el contenido principal siempre se ve**, con o sin JS.
 
 ### Lo que NO hay
 
-Ni cursor personalizado, ni scroll secuestrado, ni sonido, ni transición entre páginas, ni menú hamburguesa, ni modo oscuro, ni librerías de animación.
+Ni cursor personalizado, ni scroll secuestrado, ni sonido, ni transición entre páginas (aprobada, pendiente de implementar), ni menú hamburguesa, ni librerías de animación.
 
 ---
 

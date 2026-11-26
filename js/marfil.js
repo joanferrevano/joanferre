@@ -4,6 +4,10 @@
    2. Revelado suave al hacer scroll (solo mejora; sin JS todo se ve).
    3. Vídeos bajo demanda: el reproductor solo se carga al pulsar.
    4. Formulario de contacto (Formspree + antispam, lógica conservada).
+   5. Tema claro / oscuro.
+   6. Copiar correo.
+   7. Hora local en el pie.
+   Los controles de 5 a 7 se crean aquí: sin JS no hay botones muertos.
    ══════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -209,5 +213,172 @@
         if (btn) { btn.disabled = false; btn.textContent = 'Enviar mensaje'; }
       }
     });
+  }
+
+  /* ── 5. Tema claro / oscuro ─────────────────────────────────── */
+  /* Sin elección guardada se sigue al sistema. El script del <head>
+     aplica la elección antes de pintar, para evitar destellos. */
+  var THEME_KEY = 'jfv_theme';
+  var root = document.documentElement;
+  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  var themeBtn = null;
+
+  function storedTheme() {
+    try {
+      var t = localStorage.getItem(THEME_KEY);
+      return t === 'light' || t === 'dark' ? t : null;
+    } catch (e) { return null; }
+  }
+  function systemTheme() { return darkQuery && darkQuery.matches ? 'dark' : 'light'; }
+  function currentTheme() { return root.getAttribute('data-theme') || systemTheme(); }
+
+  /* Refleja el tema vigente en el botón y en la barra del navegador */
+  function syncTheme() {
+    var dark = currentTheme() === 'dark';
+    if (themeBtn) themeBtn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var bg = getComputedStyle(root).getPropertyValue('--ivory').trim();
+    if (meta && bg) meta.setAttribute('content', bg);
+  }
+
+  function applyStoredTheme() {
+    var t = storedTheme();
+    if (t) root.setAttribute('data-theme', t);
+    else root.removeAttribute('data-theme');
+    syncTheme();
+  }
+
+  function toggleTheme() {
+    var next = currentTheme() === 'dark' ? 'light' : 'dark';
+
+    function apply() {
+      root.classList.add('theme-switching');
+      /* Si coincide con el sistema no se guarda nada: se vuelve a seguirlo */
+      if (next === systemTheme()) {
+        root.removeAttribute('data-theme');
+        try { localStorage.removeItem(THEME_KEY); } catch (e) {}
+      } else {
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      }
+      syncTheme();   /* fuerza el recálculo de estilos antes de quitar la clase */
+      requestAnimationFrame(function () { root.classList.remove('theme-switching'); });
+    }
+
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !calm) document.startViewTransition(apply);
+    else apply();
+  }
+
+  var headerInner = document.querySelector('.site-header__inner');
+  if (headerInner) {
+    themeBtn = document.createElement('button');
+    themeBtn.type = 'button';
+    themeBtn.className = 'theme-toggle';
+    themeBtn.setAttribute('aria-label', 'Modo oscuro');
+    themeBtn.title = 'Modo oscuro';
+    themeBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">' +
+      '<circle cx="9" cy="9" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<path d="M9 1.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>';
+    themeBtn.addEventListener('click', toggleTheme);
+    headerInner.appendChild(themeBtn);
+  }
+
+  syncTheme();
+  if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', syncTheme);
+  /* Otra pestaña, o volver con «atrás» a una página guardada en caché */
+  window.addEventListener('storage', function (e) { if (e.key === THEME_KEY) applyStoredTheme(); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) applyStoredTheme(); });
+
+  /* ── 6. Copiar correo ───────────────────────────────────────── */
+  var announcer = document.createElement('p');
+  announcer.className = 'sr-only';
+  announcer.setAttribute('role', 'status');
+  document.body.appendChild(announcer);
+
+  /* Método antiguo, para navegadores sin API de portapapeles o sin permiso */
+  function copyFallback(text) {
+    return new Promise(function (resolve, reject) {
+      var previous = document.activeElement;
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.className = 'sr-only';
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(area);
+      if (previous && previous.focus) previous.focus({ preventScroll: true });
+      if (ok) resolve(); else reject(new Error('copy'));
+    });
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () { return copyFallback(text); });
+    }
+    return copyFallback(text);
+  }
+
+  document.querySelectorAll('.site-footer__mail, .contact-mail').forEach(function (link) {
+    var email = (link.getAttribute('href') || '').replace(/^mailto:/, '');
+    if (!email) return;
+
+    var box = document.createElement('div');
+    box.className = 'mail-copy';
+    link.parentNode.insertBefore(box, link);
+    box.appendChild(link);
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.setAttribute('data-state', 'idle');
+    btn.innerHTML =
+      '<span class="copy-btn__state copy-btn__state--idle">Copiar correo</span>' +
+      '<span class="copy-btn__state copy-btn__state--ok">' +
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+        '<path d="M2.5 8.5l3.5 3.5 7.5-8"/></svg>Copiado</span>' +
+      '<span class="copy-btn__state copy-btn__state--error">No se pudo copiar</span>';
+    box.appendChild(btn);
+
+    var timer;
+    function show(state, message) {
+      btn.setAttribute('data-state', state);
+      announcer.textContent = message;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        btn.setAttribute('data-state', 'idle');
+        announcer.textContent = '';
+      }, 2400);
+    }
+
+    btn.addEventListener('click', function () {
+      copyText(email).then(
+        function () { show('ok', 'Correo copiado'); },
+        function () { show('error', 'No se pudo copiar el correo. Selecciónalo a mano.'); }
+      );
+    });
+  });
+
+  /* ── 7. Hora local en el pie ────────────────────────────────── */
+  var footBottom = document.querySelector('.site-footer__bottom');
+  var clockFormat = null;
+  try {
+    clockFormat = new Intl.DateTimeFormat('es-ES', {
+      timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    });
+  } catch (e) {}   /* sin soporte de zonas horarias no se muestra nada */
+
+  if (footBottom && clockFormat) {
+    var clock = document.createElement('span');
+    footBottom.insertBefore(clock, footBottom.children[1] || null);
+    var clockTimer;
+    var tick = function () {
+      clock.textContent = 'Banyeres de Mariola, ' + clockFormat.format(new Date());
+      clearTimeout(clockTimer);
+      clockTimer = setTimeout(tick, 60000 - (Date.now() % 60000) + 50);   /* al cambiar de minuto */
+    };
+    tick();
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
   }
 })();
