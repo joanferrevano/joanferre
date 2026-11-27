@@ -68,7 +68,10 @@ joanferre/
 │   ├── marfil.js                 ÚNICO script en uso
 │   ├── main.js, nav.js           HEREDADO, sin uso
 ├── fonts/                        Bricolage Grotesque e Inter (woff2) + licencias OFL
+├── sitemap.xml                   Las 6 páginas activas (sin youtube.html)
+├── cv/joan-ferre-cv.pdf          CV (aún sin enlazar en la web)
 ├── images/
+│   ├── og.png                    Imagen al compartir, 1200×630 (estilo Marfil)
 │   ├── favicon/                  ico, 16, 32, apple-touch-icon, android-chrome 192/512
 │   ├── profile.jpg               0 bytes (vacío), no se usa en ninguna página
 │   └── thumbnails/               5 PNG de un uso anterior (~7,3 MB), sin uso
@@ -86,9 +89,40 @@ Tamaños aproximados: `marfil.css` 730 líneas, `marfil.js` 710, páginas entre 
 
 ## 4. Hosting y cómo ejecutarlo
 
-- **Hosting previsto:** GitHub Pages desde la rama `main` (raíz), según `README.md` y el remoto `origin = joanferrevano/joanferre`. No hay `CNAME`, workflows ni `_config.yml`. **No se ha verificado la configuración real de Pages.**
+- **URL pública:** `https://joanferrevano.github.io/joanferre/` (confirmada por Joan; más adelante comprará un dominio, ver «Cambiar a dominio propio»).
+- **Hosting:** GitHub Pages desde la rama `main` (raíz), según `README.md` y el remoto `origin = joanferrevano/joanferre`. No hay `CNAME`, workflows ni `_config.yml`. **No se ha verificado la configuración real de Pages.**
 - Como el repositorio se llama `joanferre`, el sitio puede servirse bajo un subdirectorio (`usuario.github.io/joanferre/`). Por eso **todas las rutas son relativas** (sin `/` inicial). Mantenlo así.
 - No dependas de URLs sin extensión (`/programacion`): con hosting estático la ruta es `dev.html`, `video.html`, etc.
+
+### Cambiar a dominio propio
+
+La URL base `https://joanferrevano.github.io/joanferre/` está escrita **solo** en estos sitios:
+
+| Archivo | Etiquetas |
+|---|---|
+| `index.html`, `dev.html`, `video.html`, `about.html`, `contact.html`, `batoilogic.html` | `<link rel="canonical">`, `og:url`, `og:image` |
+| `index.html` | `url` de los datos estructurados `Person` (JSON-LD) |
+| `sitemap.xml` | los `<loc>` |
+
+Todo se cambia en un paso (PowerShell, desde la raíz del repo; sustituye `DOMINIO`):
+
+```powershell
+$old = 'https://joanferrevano.github.io/joanferre/'; $new = 'https://DOMINIO/'
+$utf8 = New-Object System.Text.UTF8Encoding $false
+Get-ChildItem *.html, sitemap.xml | ForEach-Object {
+  $t = [IO.File]::ReadAllText($_.FullName, $utf8)
+  if ($t.Contains($old)) { [IO.File]::WriteAllText($_.FullName, $t.Replace($old, $new), $utf8) }
+}
+```
+
+Además, fuera de ese reemplazo:
+- Archivo `CNAME` en la raíz con el dominio (o configurarlo en GitHub → Settings → Pages, que lo crea) y DNS del proveedor apuntando a GitHub Pages.
+- Crear `robots.txt` con `Sitemap: https://DOMINIO/sitemap.xml` (hoy no existe a propósito: en una web de proyecto los buscadores no lo leen).
+- Google Search Console: añadir la propiedad del dominio y enviar de nuevo el sitemap.
+- Formspree: comprobar que el formulario admite el dominio nuevo, si tiene restricción de dominios.
+- Actualizar la URL en este archivo y en `README.md` si aparece.
+
+`images/og.png` no contiene la URL: no hay que regenerarla.
 
 ### Ver en local
 
@@ -109,7 +143,7 @@ Tamaños aproximados: `marfil.css` 730 líneas, `marfil.js` 710, páginas entre 
 
 ### Esqueleto común (las 6 páginas activas)
 
-1. `<head>`: `charset`, `viewport`, `<title>`, `meta description`, `theme-color #FAF7F2`, favicons (ico, 32, 16, apple-touch), `<link rel="preload">` de `fonts/bricolage-latin.woff2`, `<link rel="stylesheet" href="css/marfil.css">` y un `<script>` inline que añade la clase `js` a `<html>` (ver §7).
+1. `<head>`: `charset`, `viewport`, `<title>`, `meta description`, `canonical`, etiquetas Open Graph y `twitter:card` (URLs absolutas, ver §4; `index.html` lleva además el JSON-LD `Person`), `theme-color #FAF7F2`, favicons (ico, 32, 16, apple-touch), `<link rel="preload">` de `fonts/bricolage-latin.woff2`, `<link rel="stylesheet" href="css/marfil.css">` y un `<script>` inline que añade la clase `js` a `<html>` (ver §7).
 2. `<a class="skip-link" href="#contenido">` (enlace de salto).
 3. `<header class="site-header">` con `.wordmark` («Joan Ferre») y `<nav class="nav" aria-label="Principal">` con **Programación · Edición · Sobre mí · Contacto**.
 4. `<main id="contenido">` con las secciones.
