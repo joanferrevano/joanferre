@@ -9,6 +9,8 @@
    7. Hora local en el pie.
    8. Filas escalonadas y cita por palabras.
    9. Título compartido en la transición entre páginas.
+   10. Línea de tiempo de la página.
+   11. Paleta de comandos.
    Los controles de 5 a 7 se crean aquí: sin JS no hay botones muertos.
    ══════════════════════════════════════════════════════════════ */
 (function () {
@@ -337,11 +339,13 @@
       area.value = text;
       area.setAttribute('readonly', '');
       area.className = 'sr-only';
-      document.body.appendChild(area);
+      /* con un <dialog> modal abierto, lo de fuera no se puede seleccionar */
+      var host = document.querySelector('dialog[open]') || document.body;
+      host.appendChild(area);
       area.select();
       var ok = false;
       try { ok = document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(area);
+      host.removeChild(area);
       if (previous && previous.focus) previous.focus({ preventScroll: true });
       if (ok) resolve(); else reject(new Error('copy'));
     });
@@ -478,4 +482,263 @@
     try { sessionStorage.setItem('jfv_vt', '1'); } catch (err) {}
   });
   window.addEventListener('pageshow', releaseTitle);
+
+  /* ── 10. Línea de tiempo de la página ───────────────────────── */
+  /* Un «clip» por cada <section data-clip>, con ancho proporcional a su altura. */
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-clip]'));
+  var header = document.querySelector('.site-header');
+
+  if (header && sections.length > 1) {
+    var timeline = document.createElement('nav');
+    timeline.className = 'timeline';
+    timeline.setAttribute('aria-label', 'Secciones de la página');
+    timeline.innerHTML =
+      '<div class="wrap timeline__inner">' +
+        '<span class="timeline__label" aria-hidden="true"></span>' +
+        '<div class="timeline__track"><span class="timeline__head" aria-hidden="true"></span></div>' +
+        '<span class="timeline__keys" aria-hidden="true">J anterior, L siguiente</span>' +
+      '</div>';
+    var label = timeline.querySelector('.timeline__label');
+    var track = timeline.querySelector('.timeline__track');
+    var playhead = timeline.querySelector('.timeline__head');
+
+    var clips = sections.map(function (section) {
+      var link = document.createElement('a');
+      var name = section.getAttribute('data-clip');
+      link.className = 'timeline__clip';
+      link.href = '#' + section.id;
+      link.title = name;
+      link.setAttribute('aria-label', name);
+      link.setAttribute('aria-keyshortcuts', 'J L');
+      link.innerHTML = '<span class="timeline__bar"><span class="timeline__fill"></span></span>';
+      track.insertBefore(link, playhead);
+      return { section: section, link: link, fill: link.querySelector('.timeline__fill'), name: name };
+    });
+    header.parentNode.insertBefore(timeline, header.nextSibling);
+    document.documentElement.classList.add('has-timeline');
+
+    var current = 0;
+    var frameRequested = false;
+    var clamp = function (n) { return Math.max(0, Math.min(1, n)); };
+
+    var update = function () {
+      frameRequested = false;
+      var doc = document.documentElement;
+      var view = window.innerHeight;
+      var max = doc.scrollHeight - view;
+      var offset = parseFloat(getComputedStyle(doc).scrollPaddingTop) || 0;
+      /* La línea de lectura está bajo la cabecera; en la última pantalla
+         baja hasta el borde para que las secciones finales se completen. */
+      var tail = clamp(1 - (max - window.pageYOffset) / view);
+      var line = offset + 2 + tail * (view - offset);
+      var trackBox = track.getBoundingClientRect();
+      var headX = 0;
+      current = -1;
+
+      clips.forEach(function (clip, i) {
+        var box = clip.section.getBoundingClientRect();
+        var done = clamp((line - box.top) / box.height);
+        clip.fill.style.transform = 'scaleX(' + done + ')';
+        if (box.top <= line) {
+          current = i;
+          var linkBox = clip.link.getBoundingClientRect();
+          headX = linkBox.left - trackBox.left + linkBox.width * done;
+        }
+      });
+      clips.forEach(function (clip, i) {
+        if (i === current) clip.link.setAttribute('aria-current', 'location');
+        else clip.link.removeAttribute('aria-current');
+      });
+      label.textContent = clips[Math.max(0, current)].name;
+      playhead.style.transform = 'translateX(' + headX + 'px)';
+    };
+    var requestUpdate = function () {
+      if (frameRequested) return;
+      frameRequested = true;
+      requestAnimationFrame(update);
+    };
+    var measure = function () {
+      clips.forEach(function (clip) { clip.link.style.flexGrow = clip.section.offsetHeight; });
+      requestUpdate();
+    };
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', measure);
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
+    measure();
+
+    /* En móvil es solo informativa: sin enlaces pulsables ni enfocables */
+    var small = window.matchMedia('(max-width: 640px)');
+    var setInert = function () {
+      timeline.inert = small.matches;
+      if (small.matches) timeline.setAttribute('aria-hidden', 'true');
+      else timeline.removeAttribute('aria-hidden');
+    };
+    setInert();
+    if (small.addEventListener) small.addEventListener('change', setInert);
+
+    /* J / L, como en un editor: solo con el foco dentro de la línea de tiempo */
+    timeline.addEventListener('keydown', function (e) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      var key = e.key.toLowerCase();
+      if (key !== 'j' && key !== 'l') return;
+      e.preventDefault();
+      var focused = clips.map(function (c) { return c.link; }).indexOf(document.activeElement);
+      var next = (focused < 0 ? current : focused) + (key === 'l' ? 1 : -1);
+      var clip = clips[Math.max(0, Math.min(clips.length - 1, next))];
+      clip.link.click();
+      clip.link.focus({ preventScroll: true });   /* tras el salto, que mueve el foco */
+    });
+  }
+
+  /* ── 11. Paleta de comandos (Ctrl+K / ⌘K) ───────────────────── */
+  var palette = document.createElement('dialog');
+
+  if (headerInner && typeof palette.showModal === 'function') {
+    var isMac = /Mac|iPhone|iPad/.test(navigator.platform || '');
+    var shortcut = isMac ? '⌘K' : 'Ctrl+K';
+
+    palette.className = 'palette';
+    palette.setAttribute('aria-label', 'Paleta de comandos');
+    palette.innerHTML =
+      '<div class="palette__top">' +
+        '<input class="palette__input" type="text" role="combobox" aria-expanded="true" ' +
+          'aria-controls="palette-list" aria-autocomplete="list" aria-label="Buscar una acción" ' +
+          'placeholder="Buscar una acción" autocomplete="off" spellcheck="false" />' +
+        '<button class="palette__close" type="button">Cerrar</button>' +
+      '</div>' +
+      '<ul class="palette__list" id="palette-list" role="listbox" aria-label="Acciones"></ul>' +
+      '<p class="palette__status" role="status"></p>';
+    document.body.appendChild(palette);
+
+    var input = palette.querySelector('.palette__input');
+    var list = palette.querySelector('.palette__list');
+    var status = palette.querySelector('.palette__status');
+    var shown = [];
+    var selected = 0;
+    var closeTimer;
+
+    var go = function (url) { return function () { palette.close(); window.location.href = url; }; };
+    var external = function (url) { return function () { palette.close(); window.open(url, '_blank', 'noopener'); }; };
+
+    var commands = [
+      { text: 'Portada', group: 'Ir a', run: go('index.html') },
+      { text: 'Programación', group: 'Ir a', run: go('dev.html') },
+      { text: 'Edición de vídeo', group: 'Ir a', run: go('video.html') },
+      { text: 'BatoiLOGIC', group: 'Ir a', run: go('batoilogic.html') },
+      { text: 'Sobre mí', group: 'Ir a', run: go('about.html') },
+      { text: 'Contacto', group: 'Ir a', run: go('contact.html') }
+    ];
+    sections.forEach(function (section) {
+      commands.push({ text: section.getAttribute('data-clip'), group: 'En esta página', run: function () {
+        palette.close();
+        if (window.location.hash === '#' + section.id) section.scrollIntoView();
+        else window.location.hash = section.id;
+      } });
+    });
+    var mailLink = document.querySelector('a[href^="mailto:"]');
+    var address = mailLink ? mailLink.getAttribute('href').replace(/^mailto:/, '') : 'joanferrecontact@gmail.com';
+    commands.push(
+      { text: 'Copiar correo', group: 'Acción', run: function () {
+        var say = function (message) {
+          status.textContent = message;
+          clearTimeout(closeTimer);
+        };
+        copyText(address).then(
+          function () { say('Correo copiado'); closeTimer = setTimeout(function () { palette.close(); }, 900); },
+          function () { say('No se pudo copiar. El correo es ' + address); }
+        );
+      } },
+      { text: 'Cambiar tema claro u oscuro', group: 'Acción', run: function () { palette.close(); toggleTheme(); } },
+      { text: 'Abrir GitHub', group: 'Pestaña nueva', run: external('https://github.com/joanferrevano') },
+      { text: 'Abrir LinkedIn', group: 'Pestaña nueva', run: external('https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/') }
+    );
+
+    /* sin tildes ni mayúsculas: «edicion» encuentra «Edición» */
+    var plain = function (text) {
+      text = text.toLowerCase();
+      return text.normalize ? text.normalize('NFD').replace(/[̀-ͯ]/g, '') : text;
+    };
+
+    var select = function (index) {
+      selected = shown.length ? (index + shown.length) % shown.length : 0;
+      Array.prototype.forEach.call(list.children, function (item, i) {
+        item.setAttribute('aria-selected', i === selected ? 'true' : 'false');
+      });
+      var active = list.children[selected];
+      if (active) {
+        input.setAttribute('aria-activedescendant', active.id);
+        active.scrollIntoView({ block: 'nearest' });
+      } else {
+        input.removeAttribute('aria-activedescendant');
+      }
+    };
+
+    var render = function () {
+      var query = plain(input.value.trim());
+      shown = commands.filter(function (c) { return plain(c.group + ' ' + c.text).indexOf(query) !== -1; });
+      list.textContent = '';
+      shown.forEach(function (command, i) {
+        var item = document.createElement('li');
+        item.className = 'palette__option';
+        item.id = 'palette-option-' + i;
+        item.setAttribute('role', 'option');
+        var text = document.createElement('span');
+        text.textContent = command.text;
+        var group = document.createElement('span');
+        group.className = 'palette__group';
+        group.textContent = command.group;
+        item.appendChild(text);
+        item.appendChild(group);
+        item.addEventListener('mousemove', function () { if (selected !== i) select(i); });
+        item.addEventListener('click', function () { select(i); command.run(); });
+        list.appendChild(item);
+      });
+      status.textContent = shown.length ? '' : 'No hay acciones con ese nombre.';
+      select(0);
+    };
+
+    var openPalette = function () {
+      if (palette.open) return;
+      input.value = '';
+      render();
+      palette.showModal();
+      list.scrollTop = 0;
+      input.focus();
+    };
+
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        select(selected + (e.key === 'ArrowDown' ? 1 : -1));
+      } else if (e.key === 'Enter' && !e.isComposing) {
+        e.preventDefault();
+        if (shown[selected] && !e.repeat) shown[selected].run();
+      }
+    });
+    palette.querySelector('.palette__close').addEventListener('click', function () { palette.close(); });
+    /* pulsar fuera (en el fondo) cierra */
+    palette.addEventListener('click', function (e) { if (e.target === palette) palette.close(); });
+    palette.addEventListener('close', function () { clearTimeout(closeTimer); });
+
+    document.addEventListener('keydown', function (e) {
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey || e.key.toLowerCase() !== 'k') return;
+      e.preventDefault();
+      if (palette.open) palette.close();
+      else openPalette();
+    });
+
+    var paletteBtn = document.createElement('button');
+    paletteBtn.type = 'button';
+    paletteBtn.className = 'palette-toggle';
+    paletteBtn.setAttribute('aria-label', 'Paleta de comandos');
+    paletteBtn.setAttribute('aria-haspopup', 'dialog');
+    paletteBtn.setAttribute('aria-keyshortcuts', 'Control+K Meta+K');
+    paletteBtn.title = 'Paleta de comandos (' + shortcut + ')';
+    paletteBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' +
+      '<circle cx="7.75" cy="7.75" r="5.5"/><path d="M12 12l4 4"/></svg>';
+    paletteBtn.addEventListener('click', openPalette);
+    headerInner.insertBefore(paletteBtn, themeBtn);
+  }
 })();

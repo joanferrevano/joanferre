@@ -80,7 +80,7 @@ joanferre/
 └── .gitignore                    .claude, preview-dev/, .review/
 ```
 
-Tamaños aproximados: `marfil.css` 640 líneas, `marfil.js` 480, páginas entre 140 y 260 líneas.
+Tamaños aproximados: `marfil.css` 730 líneas, `marfil.js` 710, páginas entre 140 y 260 líneas.
 
 ---
 
@@ -246,10 +246,12 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
 
 9. **Filas escalonadas y cita por palabras** (bloque 8 del archivo).
 10. **Título compartido entre páginas** (bloque 9 del archivo).
+11. **Línea de tiempo** (bloque 10): en las páginas con dos o más `<section id="sec-…" data-clip="Nombre">` (`dev`, `about`, `batoilogic`) inserta `nav.timeline` bajo la cabecera. Cada clip mide en proporción a su sección y enlaza a ella; muestra la sección actual y un cabezal. Con el foco dentro, J y L van a la anterior o siguiente. En móvil (≤640) es una raya fija de 3 px, solo informativa (`inert`). No muestra tiempos ni duraciones.
+12. **Paleta de comandos** (bloque 11): `<dialog>` que se abre con Ctrl+K / ⌘K o con `.palette-toggle` en la cabecera. Ir a páginas y secciones, copiar correo, cambiar tema, abrir GitHub o LinkedIn (solo esas dos redes). Una página nueva se añade a mano a la lista `commands`.
 
 El formulario, además, enfoca el campo que falla (`aria-invalid` + `aria-describedby`) y muestra «Enviado ✓» antes de la espera.
 
-Los controles de 6 a 8 se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
+Los controles de 6 a 8, la línea de tiempo y la paleta se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
 
 ### Script inline del `<head>` y degradación
 

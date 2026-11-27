@@ -534,6 +534,67 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .vt-arrive .rise, .vt-arrive .beat, .vt-arrive .mask > span, .vt-arrive .mask .dot,
 .vt-shared .wipe__clip, .vt-shared .wipe__text { animation: none; }
 
+/* ── Línea de tiempo de la página ────────────────────────────── */
+/* La crea marfil.js en las páginas con secciones [data-clip]. */
+.timeline {
+  position: sticky; top: calc(4.5rem + 1px); z-index: 40;
+  background: var(--ivory); border-bottom: 1px solid var(--line);
+}
+.timeline__inner { display: flex; align-items: center; gap: var(--s-5); height: 2.5rem; }
+.timeline__label { flex: none; width: 10rem; font-size: var(--fs-meta); font-weight: 600; white-space: nowrap; }
+.timeline__keys { flex: none; font-size: var(--fs-meta); color: var(--stone); visibility: hidden; }
+.timeline:focus-within .timeline__keys { visibility: visible; }
+.timeline__track { position: relative; flex: 1; display: flex; gap: 3px; height: 100%; }
+.timeline__clip { position: relative; flex: 1 1 0; min-width: 1.5rem; }   /* zona de pulsación: toda la altura */
+.timeline__clip:focus-visible { outline-offset: -3px; }
+.timeline__bar {
+  position: absolute; left: 0; right: 0; top: 50%; height: 6px; margin-top: -3px;
+  background: var(--line); border-radius: 2px; overflow: hidden;
+}
+.timeline__fill { display: block; height: 100%; background: var(--line-strong); transform: scaleX(0); transform-origin: left; }
+.timeline__clip[aria-current] .timeline__fill { background: var(--charcoal); }
+.timeline__head { position: absolute; inset: 0; pointer-events: none; }   /* ocupa la pista: translateX en % */
+.timeline__head::before {
+  content: ''; position: absolute; left: -1px; top: 0.5rem; bottom: 0.5rem; width: 2px; background: var(--clay);
+}
+.has-timeline { scroll-padding-top: 8rem; }
+
+/* ── Paleta de comandos ──────────────────────────────────────── */
+/* El botón y el <dialog> los crea marfil.js. */
+.palette-toggle {
+  display: grid; place-items: center; flex: none;
+  width: 2.75rem; height: 2.75rem; padding: 0;
+  background: transparent; border: 1px solid var(--line-strong); border-radius: var(--r-s);
+}
+.site-header__inner .palette-toggle + .theme-toggle { margin-left: calc(var(--s-3) - var(--s-5)); }
+.palette {
+  width: min(34rem, calc(100% - 2rem)); max-height: min(32rem, calc(100% - 4rem));
+  margin: 10vh auto auto; padding: 0; overflow: hidden;
+  background: var(--ivory); color: var(--charcoal);
+  border: 1px solid var(--line-strong); border-radius: var(--r-m);
+}
+.palette[open] { display: flex; flex-direction: column; animation: rise var(--dur) var(--ease) both; }
+.palette::backdrop { background: rgb(0 0 0 / 0.5); }
+.palette__top { display: flex; gap: var(--s-2); padding: var(--s-3); border-bottom: 1px solid var(--line); }
+.palette__input {
+  flex: 1; min-width: 0; padding: 0.625rem 0.75rem;
+  background: var(--ivory); border: 1px solid var(--line-strong); border-radius: var(--r-s);
+}
+.palette__close {
+  flex: none; min-height: 2.75rem; padding: 0 0.75rem; font-size: var(--fs-small);
+  background: transparent; border: 1px solid var(--line-strong); border-radius: var(--r-s);
+}
+.palette__list { overflow-y: auto; padding: var(--s-2); overscroll-behavior: contain; }
+.palette__option {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--s-4);
+  min-height: 2.75rem; padding: var(--s-2) var(--s-3);
+  border-left: 2px solid transparent; cursor: pointer;
+}
+.palette__option[aria-selected="true"] { background: var(--sand); border-left-color: var(--clay); }
+.palette__group { flex: none; font-size: var(--fs-meta); color: var(--stone); }
+.palette__status { padding: 0 var(--s-5); font-size: var(--fs-small); color: var(--stone); }
+.palette__status:not(:empty) { padding-block: var(--s-3); border-top: 1px solid var(--line); }
+
 /* ── Cambio de tema ──────────────────────────────────────────── */
 /* El botón lo inserta marfil.js: sin JS no aparece. */
 .site-header__inner { position: relative; }
@@ -572,7 +633,8 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .copy-btn[data-state="error"] { border-color: var(--error); color: var(--error); }
 
 @media (hover: hover) and (pointer: fine) {
-  .theme-toggle:hover, .copy-btn:hover { background: var(--sand); }
+  .theme-toggle:hover, .copy-btn:hover, .palette-toggle:hover, .palette__close:hover { background: var(--sand); }
+  .timeline__clip:hover .timeline__bar { background: var(--line-strong); }
   .link:hover { color: var(--clay-deep); text-decoration-color: var(--clay); }
   .link-arrow:hover span:first-child { text-decoration-color: var(--clay); }
   .link-arrow:hover .arrow { transform: translateX(4px); }
@@ -620,6 +682,17 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .site-header__inner { flex-direction: column; align-items: flex-start; gap: var(--s-2); padding-block: var(--s-4) var(--s-3); }
   .nav { flex-wrap: wrap; gap: var(--s-1) var(--s-4); width: 100%; margin-left: 0; }
   .theme-toggle { position: absolute; top: var(--s-3); right: var(--gutter); }
+  .site-header__inner .palette-toggle { position: absolute; top: var(--s-3); right: calc(var(--gutter) + 3.25rem); }
+  .site-header__inner .palette-toggle + .theme-toggle { margin-left: 0; }
+  /* En móvil, la línea de tiempo es una raya fina informativa */
+  .timeline { position: fixed; top: 0; left: 0; right: 0; z-index: 60; border-bottom: 0; background: transparent; pointer-events: none; }
+  .timeline__inner { height: 3px; padding-inline: 0; gap: 0; }
+  .timeline__label, .timeline__keys, .timeline__head { display: none; }
+  .timeline__track { gap: 2px; }
+  .timeline__clip { min-width: 0; }
+  .timeline__bar { top: 0; height: 3px; margin-top: 0; border-radius: 0; }
+  .timeline__clip .timeline__fill, .timeline__clip[aria-current] .timeline__fill { background: var(--clay); }
+  .has-timeline { scroll-padding-top: 1rem; }
   .nav a { padding-block: var(--s-3); font-size: 0.875rem; }
   .nav__contact { padding: 0.5rem 0.75rem; }
   html { scroll-padding-top: 1rem; }
@@ -637,6 +710,8 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .nav a { font-size: var(--fs-meta); }
   .nav__contact { padding-inline: 0.5rem; }
 }
+
+@media print { .timeline, .palette-toggle { display: none; } }
 
 /* ── Movimiento reducido ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
