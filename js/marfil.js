@@ -821,8 +821,10 @@
 
   /* ── 13. Consola y código Konami ────────────────────────────── */
   if (window.console && console.log) {
-    console.log('Hola, soy Joan. Si miras la consola, quizá te interese mi GitHub: ' +
-      'https://github.com/joanferrevano\n(Y hay algo escondido en el código Konami.)');
+    console.log('Hola, soy Joan. Si estás mirando la consola, seguramente hablamos el mismo idioma.\n' +
+      '¿Buscas a alguien que programe y edite vídeo? Escríbeme: joanferrecontact@gmail.com\n' +
+      'GitHub: https://github.com/joanferrevano\n' +
+      '(Y hay algo escondido en el código Konami.)');
   }
 
   var KONAMI = 'arrowup arrowup arrowdown arrowdown arrowleft arrowright arrowleft arrowright b a';
