@@ -622,12 +622,12 @@
 
     /* raíz del sitio según la ruta de este script: 404.html puede mostrarse desde cualquier URL */
     var ownScript = document.querySelector('script[src$="js/marfil.js"]');
-    var root = ownScript ? ownScript.src.replace(/js\/marfil\.js$/, '') : '';
-    var go = function (url) { return function () { palette.close(); window.location.href = root + url; }; };
+    var siteRoot = ownScript ? ownScript.src.replace(/js\/marfil\.js$/, '') : '';
+    var go = function (url) { return function () { palette.close(); window.location.href = siteRoot + url; }; };
     var download = function (url) {
       return function () {
         var link = document.createElement('a');
-        link.href = root + url;
+        link.href = siteRoot + url;
         link.download = '';
         palette.close();
         document.body.appendChild(link);
