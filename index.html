@@ -16,6 +16,18 @@
   <script>
     document.documentElement.classList.add('js');
     try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      var d = document.documentElement;
+      d.classList.add('vt-arrive');
+      try {
+        if (!sessionStorage.getItem('jfv_vt')) return;
+        sessionStorage.removeItem('jfv_vt');
+      } catch (err) { return; }
+      d.classList.add('vt-title', 'vt-shared');
+      var done = function () { d.classList.remove('vt-title'); };
+      e.viewTransition.finished.then(done, done);
+    });
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);
@@ -42,12 +54,12 @@
     <!-- ── PRESENTACIÓN ─────────────────────────────────────── -->
     <section class="hero">
       <div class="wrap">
-        <h1 class="hero__title rise">Joan Ferre<span class="dot">.</span></h1>
+        <h1 class="hero__title"><span class="mask"><span>Joan</span></span> <span class="mask"><span>Ferre<span class="dot">.</span></span></span></h1>
         <div class="hero__grid">
           <p class="lead hero__role rise rise--2">Programador y editor de vídeo.</p>
-          <div class="hero__aside rise rise--3">
-            <p>Cuento historias reales. También las programo.</p>
-            <p class="eyebrow">Banyeres de Mariola · Alicante</p>
+          <div class="hero__aside">
+            <p><span class="beat">Cuento historias reales.</span> <span class="beat beat--2">También las programo.</span></p>
+            <p class="eyebrow beat beat--2">Banyeres de Mariola · Alicante</p>
           </div>
         </div>
       </div>
@@ -56,14 +68,14 @@
     <!-- ── ACCESO A LAS DOS ÁREAS ───────────────────────────── -->
     <section aria-label="Áreas de trabajo">
       <div class="wrap">
-        <div class="areas reveal">
+        <div class="areas stagger">
           <a class="area" href="dev.html">
-            <span class="area__name">Programación</span>
+            <span class="area__name" data-vt-title="dev.html">Programación</span>
             <span class="area__desc">Aplicaciones móviles, APIs, herramientas de escritorio y scripts.</span>
             <span class="area__arrow" aria-hidden="true">→</span>
           </a>
           <a class="area" href="video.html">
-            <span class="area__name">Edición de vídeo</span>
+            <span class="area__name" data-vt-title="video.html">Edición de vídeo</span>
             <span class="area__desc">Edits y piezas audiovisuales.</span>
             <span class="area__arrow" aria-hidden="true">→</span>
           </a>
@@ -83,7 +95,7 @@
             <span class="meta">Programación</span>
           </div>
           <div class="feature__main">
-            <h2>BatoiLOGIC</h2>
+            <h2 data-vt-title="batoilogic.html">BatoiLOGIC</h2>
             <p>Sistema de gestión logística completo: dos apps móviles, API REST, backoffice Windows con reconocimiento de voz, módulos Odoo personalizados y una herramienta de línea de comandos para importar y exportar datos.</p>
             <p class="feature__stack">Flutter · Spring Boot · C# · Python / Odoo · Java · PostgreSQL · AWS EC2</p>
             <div class="feature__actions">

@@ -16,6 +16,18 @@
   <script>
     document.documentElement.classList.add('js');
     try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      var d = document.documentElement;
+      d.classList.add('vt-arrive');
+      try {
+        if (!sessionStorage.getItem('jfv_vt')) return;
+        sessionStorage.removeItem('jfv_vt');
+      } catch (err) { return; }
+      d.classList.add('vt-title', 'vt-shared');
+      var done = function () { d.classList.remove('vt-title'); };
+      e.viewTransition.finished.then(done, done);
+    });
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);
@@ -43,7 +55,7 @@
     <section class="page-head">
       <div class="wrap">
         <span class="eyebrow rise">Área</span>
-        <h1 class="rise rise--2">Edición de vídeo</h1>
+        <h1 class="wipe"><span class="wipe__clip"><span class="wipe__text">Edición de vídeo</span></span></h1>
         <p class="lead rise rise--3">Cuento historias reales.</p>
       </div>
     </section>

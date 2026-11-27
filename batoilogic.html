@@ -16,6 +16,18 @@
   <script>
     document.documentElement.classList.add('js');
     try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      var d = document.documentElement;
+      d.classList.add('vt-arrive');
+      try {
+        if (!sessionStorage.getItem('jfv_vt')) return;
+        sessionStorage.removeItem('jfv_vt');
+      } catch (err) { return; }
+      d.classList.add('vt-title', 'vt-shared');
+      var done = function () { d.classList.remove('vt-title'); };
+      e.viewTransition.finished.then(done, done);
+    });
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);
@@ -50,7 +62,7 @@
 
     <section class="section--tight">
       <div class="wrap">
-        <dl class="facts reveal">
+        <dl class="facts stagger">
           <div><dt class="eyebrow">Qué es</dt><dd>Proyecto final del ciclo DAM</dd></div>
           <div><dt class="eyebrow">Aplicaciones</dt><dd>5</dd></div>
           <div><dt class="eyebrow">Tecnologías</dt><dd>9</dd></div>
@@ -80,7 +92,7 @@
           <h2 id="apps">Aplicaciones</h2>
           <span class="meta">Cinco piezas que forman un ecosistema</span>
         </div>
-        <ul class="rows">
+        <ul class="rows stagger">
           <li class="row row--3">
             <h3 class="row__name">App Repartidores</h3>
             <p class="row__desc">App móvil para repartidores con gestión de rutas, geolocalización GPS en tiempo real, actualización de estados de entrega y comunicación vía WebSocket con el backoffice.</p>
@@ -115,7 +127,7 @@
         <div class="section-head">
           <h2 id="tecnologia">Tecnología</h2>
         </div>
-        <dl class="facts">
+        <dl class="facts stagger">
           <div><dt class="eyebrow">Apps móviles cliente y repartidor</dt><dd>Flutter</dd></div>
           <div><dt class="eyebrow">API REST backend en Java</dt><dd>Spring Boot</dd></div>
           <div><dt class="eyebrow">Aplicación backoffice de escritorio</dt><dd>C# · WinForms</dd></div>
@@ -134,7 +146,7 @@
         <div class="section-head">
           <h2 id="rol">Mi contribución</h2>
         </div>
-        <ul class="rows">
+        <ul class="rows stagger">
           <li class="row row--3">
             <h3 class="row__name">Arquitectura</h3>
             <p class="row__desc row__wide">Diseño de la arquitectura del sistema y modelo de datos relacional que soporta el ecosistema completo de cinco aplicaciones.</p>

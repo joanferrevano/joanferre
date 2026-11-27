@@ -16,6 +16,18 @@
   <script>
     document.documentElement.classList.add('js');
     try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      var d = document.documentElement;
+      d.classList.add('vt-arrive');
+      try {
+        if (!sessionStorage.getItem('jfv_vt')) return;
+        sessionStorage.removeItem('jfv_vt');
+      } catch (err) { return; }
+      d.classList.add('vt-title', 'vt-shared');
+      var done = function () { d.classList.remove('vt-title'); };
+      e.viewTransition.finished.then(done, done);
+    });
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);
@@ -57,7 +69,7 @@
             <span class="meta">Proyecto final del ciclo DAM</span>
           </div>
           <div class="feature__main">
-            <h2>BatoiLOGIC</h2>
+            <h2 data-vt-title="batoilogic.html">BatoiLOGIC</h2>
             <p>Sistema de gestión logística completo: dos apps móviles, API REST, backoffice Windows con reconocimiento de voz, módulos Odoo personalizados y una herramienta de línea de comandos para importar y exportar datos. Cinco aplicaciones y nueve tecnologías.</p>
             <p class="feature__stack">Flutter · Spring Boot · C# · Python / Odoo · Java · PostgreSQL · AWS EC2</p>
             <div class="feature__actions">
@@ -80,72 +92,72 @@
 
         <div class="group">
           <h3>Herramientas y aplicaciones</h3>
-          <ul class="rows">
+          <ul class="rows stagger">
             <li class="row">
               <h4 class="row__name">Cortador de Silencios</h4>
               <p class="row__desc">Elimina automáticamente los silencios de cualquier vídeo.</p>
               <span class="row__tech">Python</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Cortador-de-Silencios" target="_blank" rel="noopener" aria-label="Cortador de Silencios en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Cortador-de-Silencios" target="_blank" rel="noopener" aria-label="Cortador de Silencios en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Pausa</h4>
               <p class="row__desc">App Android de control del tiempo de pantalla. Muestra una pantalla de espera configurable antes de abrir las apps que elijas y las bloquea cuando se agota el límite diario que fijas.</p>
               <span class="row__tech">Flutter / Dart · Kotlin</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/pausa-app" target="_blank" rel="noopener" aria-label="Pausa en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/pausa-app" target="_blank" rel="noopener" aria-label="Pausa en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Organizador de Fotos</h4>
               <p class="row__desc">Organiza automáticamente fotos del PC por fecha o tipo de archivo. Solución práctica a miles de fotos sin estructura.</p>
               <span class="row__tech">Python</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Organizador-de-Fotos" target="_blank" rel="noopener" aria-label="Organizador de Fotos en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Organizador-de-Fotos" target="_blank" rel="noopener" aria-label="Organizador de Fotos en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Organizador de Fotos (App)</h4>
               <p class="row__desc">Versión app de escritorio del organizador de fotos. La misma utilidad, mejor experiencia visual y de uso.</p>
               <span class="row__tech">Flutter / Dart</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Organizador_Fotos_PC" target="_blank" rel="noopener" aria-label="Organizador de Fotos (App) en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Organizador_Fotos_PC" target="_blank" rel="noopener" aria-label="Organizador de Fotos (App) en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Descargar Música de YouTube</h4>
               <p class="row__desc">Script para descargar música de YouTube de forma rápida y sencilla. Para uso personal y tener tu biblioteca local.</p>
               <span class="row__tech">Python</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Descargar-musica-de-YT" target="_blank" rel="noopener" aria-label="Descargar Música de YouTube en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Descargar-musica-de-YT" target="_blank" rel="noopener" aria-label="Descargar Música de YouTube en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Chat PSP</h4>
               <p class="row__desc">Aplicación de chat en tiempo real. Proyecto académico con arquitectura cliente-servidor y comunicación bidireccional.</p>
               <span class="row__tech">C#</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Chat-PSP" target="_blank" rel="noopener" aria-label="Chat PSP en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Chat-PSP" target="_blank" rel="noopener" aria-label="Chat PSP en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
           </ul>
         </div>
 
         <div class="group">
           <h3>Videojuegos y realidad virtual</h3>
-          <ul class="rows">
+          <ul class="rows stagger">
             <li class="row">
               <h4 class="row__name">Cubatis</h4>
               <p class="row__desc">Juego de mesa digital de fiesta para móvil, en vertical y pensado para grupos. Tablero con dado y fichas, cartas de reto y ranking final, con cuatro modos de juego.</p>
               <span class="row__tech">C# / Unity</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Cubatis" target="_blank" rel="noopener" aria-label="Cubatis en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Cubatis" target="_blank" rel="noopener" aria-label="Cubatis en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Planetas en VR</h4>
               <p class="row__desc">Experiencia de realidad virtual con el sistema solar navegable. Explora planetas en escala real desde dentro de un visor VR.</p>
               <span class="row__tech">C# / Unity VR</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Planetas-en-VR" target="_blank" rel="noopener" aria-label="Planetas en VR en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Planetas-en-VR" target="_blank" rel="noopener" aria-label="Planetas en VR en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">CluckRun</h4>
               <p class="row__desc">Videojuego con dos niveles e interfaz trabajada. Proyecto en equipo — diseño, programación y audio coordinados.</p>
               <span class="row__tech">C# / Unity</span>
-              <a class="row__link link" href="https://github.com/ProyectoJuegoGranja/CluckRun" target="_blank" rel="noopener" aria-label="CluckRun en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/ProyectoJuegoGranja/CluckRun" target="_blank" rel="noopener" aria-label="CluckRun en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
             <li class="row">
               <h4 class="row__name">Indiana Jones Juego</h4>
               <p class="row__desc">Juego de aventuras en terminal con emojis. Proyecto final de curso de 1º de Programación — combate, objetos y narrativa completamente en consola.</p>
               <span class="row__tech">Java</span>
-              <a class="row__link link" href="https://github.com/joanferrevano/Indiana-Jones-Juego" target="_blank" rel="noopener" aria-label="Indiana Jones Juego en GitHub">GitHub ↗</a>
+              <a class="row__link link" href="https://github.com/joanferrevano/Indiana-Jones-Juego" target="_blank" rel="noopener" aria-label="Indiana Jones Juego en GitHub">GitHub <span class="row__arrow" aria-hidden="true">↗</span></a>
             </li>
           </ul>
         </div>
@@ -158,7 +170,7 @@
         <div class="section-head">
           <h2 id="stack">Stack</h2>
         </div>
-        <dl class="stack">
+        <dl class="stack stagger">
           <div>
             <dt class="eyebrow">Lenguajes</dt>
             <dd><ul>
@@ -188,7 +200,7 @@
           <h2 id="experiencia">Experiencia</h2>
           <a class="link-arrow" href="about.html"><span>Más en Sobre mí</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
-        <ul class="rows">
+        <ul class="rows stagger">
           <li class="row row--3">
             <span class="meta">Octubre de 2026 – actualidad</span>
             <h3 class="row__name">Ondulados del Papel</h3>

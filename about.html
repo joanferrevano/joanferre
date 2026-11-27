@@ -16,6 +16,18 @@
   <script>
     document.documentElement.classList.add('js');
     try { var t = localStorage.getItem('jfv_theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    window.addEventListener('pagereveal', function (e) {
+      if (!e.viewTransition) return;
+      var d = document.documentElement;
+      d.classList.add('vt-arrive');
+      try {
+        if (!sessionStorage.getItem('jfv_vt')) return;
+        sessionStorage.removeItem('jfv_vt');
+      } catch (err) { return; }
+      d.classList.add('vt-title', 'vt-shared');
+      var done = function () { d.classList.remove('vt-title'); };
+      e.viewTransition.finished.then(done, done);
+    });
     setTimeout(function () {
       if (!document.documentElement.getAttribute('data-ready')) document.documentElement.classList.add('reveal-fallback');
     }, 3000);
@@ -50,7 +62,7 @@
     <!-- Cita propia, tomada de la versión anterior de la web -->
     <section class="section--tight">
       <div class="wrap">
-        <div class="split reveal">
+        <div class="split">
           <span class="eyebrow">Cómo lo veo</span>
           <div class="split__body">
             <p class="quote">“Soy muy friki en lo informático, pero muy abierto socialmente. Por eso todo lo que hago une las dos cosas.”</p>
@@ -64,7 +76,7 @@
         <div class="split">
           <h2 class="eyebrow" id="trayectoria">Trayectoria</h2>
           <div class="split__body">
-            <ul class="rows">
+            <ul class="rows stagger">
               <li class="row row--3">
                 <span class="meta">Octubre de 2026 – actualidad</span>
                 <div>
@@ -106,7 +118,7 @@
         <div class="split">
           <h2 class="eyebrow" id="formacion">Formación</h2>
           <div class="split__body">
-            <ul class="rows">
+            <ul class="rows stagger">
               <li class="row row--3">
                 <span class="meta">Septiembre de 2023 – junio de 2026</span>
                 <div class="row__wide">
@@ -138,12 +150,12 @@
       <div class="wrap">
         <div class="areas">
           <a class="area" href="dev.html">
-            <span class="area__name">Programación</span>
+            <span class="area__name" data-vt-title="dev.html">Programación</span>
             <span class="area__desc">Proyectos y stack</span>
             <span class="area__arrow" aria-hidden="true">→</span>
           </a>
           <a class="area" href="video.html">
-            <span class="area__name">Edición de vídeo</span>
+            <span class="area__name" data-vt-title="video.html">Edición de vídeo</span>
             <span class="area__desc">Edits y piezas audiovisuales</span>
             <span class="area__arrow" aria-hidden="true">→</span>
           </a>

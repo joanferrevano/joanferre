@@ -7,6 +7,8 @@
    5. Tema claro / oscuro.
    6. Copiar correo.
    7. Hora local en el pie.
+   8. Filas escalonadas y cita por palabras.
+   9. Título compartido en la transición entre páginas.
    Los controles de 5 a 7 se crean aquí: sin JS no hay botones muertos.
    ══════════════════════════════════════════════════════════════ */
 (function () {
@@ -126,6 +128,18 @@
       }, 1000);
     }
 
+    var FIELDS = ['nombre', 'email', 'asunto', 'mensaje'];
+
+    function clearInvalid(field) {
+      field.removeAttribute('aria-invalid');
+      field.removeAttribute('aria-describedby');
+    }
+    FIELDS.forEach(function (id) {
+      var field = form.querySelector('#' + id);
+      if (field) field.addEventListener('input', function () { clearInvalid(field); });
+    });
+
+    /* Devuelve null o { msg, field }: el campo que hay que corregir */
     function validateFields() {
       var nombre  = ((form.querySelector('#nombre')  || {}).value || '').trim();
       var email   = ((form.querySelector('#email')   || {}).value || '').trim();
@@ -133,19 +147,22 @@
       var mensaje = ((form.querySelector('#mensaje') || {}).value || '').trim();
 
       if (!nombre || !email || !asunto || !mensaje)
-        return 'Completa todos los campos obligatorios.';
+        return { msg: 'Completa todos los campos obligatorios.',
+                 field: FIELDS[[nombre, email, asunto, mensaje].indexOf('')] };
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-        return 'El email no tiene un formato válido.';
+        return { msg: 'El email no tiene un formato válido.', field: 'email' };
       if (nombre.length < 2)
-        return 'El nombre es demasiado corto.';
+        return { msg: 'El nombre es demasiado corto.', field: 'nombre' };
       if (mensaje.length < 10)
-        return 'El mensaje es demasiado corto (mín. 10 caracteres).';
+        return { msg: 'El mensaje es demasiado corto (mín. 10 caracteres).', field: 'mensaje' };
       return null;
     }
 
     /* Los avisos usan clases (is-error / is-warn / is-ok) en vez de colores
        en línea, para mantener el contraste sobre el fondo marfil. */
     function setAviso(msg, kind) {
+      aviso.className = 'form__aviso';
+      void aviso.offsetWidth;   /* reinicia la entrada si se repite el aviso */
       aviso.textContent = msg;
       aviso.className = 'form__aviso' + (kind ? ' is-' + kind : '');
     }
@@ -177,8 +194,21 @@
       }
 
       /* 4 · Validación */
+      FIELDS.forEach(function (id) {
+        var field = form.querySelector('#' + id);
+        if (field) clearInvalid(field);
+      });
       var err = validateFields();
-      if (err) { setAviso(err, 'error'); return; }
+      if (err) {
+        setAviso(err.msg, 'error');
+        var bad = form.querySelector('#' + err.field);
+        if (bad) {
+          bad.setAttribute('aria-invalid', 'true');
+          bad.setAttribute('aria-describedby', 'form-aviso');
+          bad.focus();
+        }
+        return;
+      }
 
       /* 5 · Turnstile (desactivado, como en la versión original) */
       if (TURNSTILE_ENABLED) {
@@ -204,7 +234,10 @@
           setAviso('Mensaje enviado. Te respondo pronto.', 'ok');
           form.reset();
           if (TURNSTILE_ENABLED && window.turnstile) window.turnstile.reset();
-          if (btn) startBtnCooldown(btn, BTN_COOLDOWN_S);
+          if (btn) {
+            btn.textContent = 'Enviado ✓';
+            setTimeout(function () { startBtnCooldown(btn, BTN_COOLDOWN_S); }, 1600);
+          }
         } else {
           throw new Error('HTTP ' + res.status);
         }
@@ -381,4 +414,68 @@
     tick();
     document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
   }
+
+  /* ── 8. Filas escalonadas y cita por palabras ───────────────── */
+  var canObserve = !reducedMotion && 'IntersectionObserver' in window;
+  var items = document.querySelectorAll('.stagger > *');
+  var quote = document.querySelector('.quote');
+
+  if (!canObserve) {
+    items.forEach(function (el) { el.classList.add('is-in'); });
+  } else {
+    /* el turno cuenta solo los elementos que entran a la vez */
+    var rowObserver = new IntersectionObserver(function (entries) {
+      var turn = 0;
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.style.setProperty('--i', turn++);
+        entry.target.classList.add('is-in');
+        rowObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    items.forEach(function (el) { rowObserver.observe(el); });
+
+    if (quote) {
+      var words = quote.textContent.trim().split(/\s+/);
+      quote.textContent = '';
+      words.forEach(function (word, i) {
+        var span = document.createElement('span');
+        span.className = 'quote__word';
+        span.style.setProperty('--i', i);
+        span.textContent = word;
+        if (i) quote.appendChild(document.createTextNode(' '));
+        quote.appendChild(span);
+      });
+      var quoteObserver = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        quote.classList.add('is-in');
+        quoteObserver.disconnect();
+      }, { threshold: 0.4 });
+      quoteObserver.observe(quote);
+    }
+  }
+
+  /* ── 9. Título compartido entre páginas ─────────────────────── */
+  /* Al pulsar un acceso con [data-vt-title="destino"], ese nombre viaja
+     hasta el <h1> de la página nueva (la recibe el script del <head>). */
+  var clicked = null;
+  var traveling = null;
+  function releaseTitle() {
+    if (traveling) traveling.style.viewTransitionName = '';
+    traveling = null;
+  }
+  document.addEventListener('click', function (e) {
+    clicked = e.target.closest ? e.target.closest('a[href]') : null;
+  });
+  window.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition || !clicked || !e.activation || !e.activation.entry) return;
+    if (e.activation.entry.url !== clicked.href) return;
+    var box = clicked.closest('.area, .feature');
+    var title = box && box.querySelector('[data-vt-title]');
+    if (!title || title.getAttribute('data-vt-title') !== clicked.getAttribute('href')) return;
+    traveling = title;
+    title.style.viewTransitionName = 'page-title';
+    try { sessionStorage.setItem('jfv_vt', '1'); } catch (err) {}
+  });
+  window.addEventListener('pageshow', releaseTitle);
 })();

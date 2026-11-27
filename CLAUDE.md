@@ -80,7 +80,7 @@ joanferre/
 └── .gitignore                    .claude, preview-dev/, .review/
 ```
 
-Tamaños aproximados: `marfil.css` 475 líneas, `marfil.js` 213, páginas entre 126 y 247 líneas.
+Tamaños aproximados: `marfil.css` 640 líneas, `marfil.js` 480, páginas entre 140 y 260 líneas.
 
 ---
 
@@ -207,13 +207,15 @@ Contrastes del tema claro **calculados con fórmula WCAG** (no con herramienta e
 
 ### Animaciones
 
-Solo tres tipos, todas suaves y sin efectos espectaculares:
+Tokens: `--dur` (220 ms, hover y foco), `--dur-slow` (420 ms, filas y transición entre páginas), `--dur-enter` (600 ms, entradas y filetes), `--stagger` (60 ms), `--ease` y `--ease-out`. Solo `opacity` y `transform` (más los cambios de color en hover).
 
-1. `@keyframes rise` (opacidad + 14 px de desplazamiento, 700 ms, `--ease`) con `.rise`, `.rise--2` (retraso 90 ms) y `.rise--3` (180 ms): entrada del hero y de las cabeceras de página al cargar. Es CSS puro: sin JS el contenido se ve igual.
-2. Revelado al hacer scroll: `.js .reveal` (opacidad 0 + 14 px) → `.is-in` (600 ms). **Solo se aplica si `<html>` tiene la clase `js`**.
-3. Transiciones de 220 ms (`--dur`) en hover/foco: colores, flecha, subrayado de nav, botón de reproducir (`scale(1.06)`).
+1. **Entradas al cargar** (CSS puro): `.rise` en cabeceras de página; en la portada, `.mask` (el nombre sube desde una máscara y el punto entra el último) y `.beat` (la frase en dos tiempos, todo por debajo de 1 s); en Edición, `.wipe` (barrido horizontal del título).
+2. **Al hacer scroll:** `.js .reveal` (bloques) y `.js .stagger` (sus hijos entran escalonados; en `.row` y `.area` el filete se dibuja de izquierda a derecha y las listas de funciones entran en cascada).
+3. **Cita de Sobre mí:** `marfil.js` la divide en palabras, que aparecen una sola vez.
+4. **Entre páginas:** View Transitions nativas (`@view-transition`), con fundido, cabecera quieta, subrayado de sección que se desliza y **título compartido**: un acceso con `data-vt-title="destino.html"` dentro de `.area` o `.feature` viaja hasta el `<h1>`. Intervienen el script del `<head>` (`pagereveal`, clases `vt-*`) y el bloque 9 de `marfil.js` (`pageswap`). No funciona con `file://`: hace falta un servidor HTTP. Sin soporte, se navega sin transición.
+5. **Hover y foco:** flechas, nombre y «↗» (`.row__arrow`) en filas con enlace, trazo bajo el campo enfocado, entrada del aviso del formulario.
 
-`@media (prefers-reduced-motion: reduce)` anula duraciones de animación y transición y deja `.reveal` visible.
+Todos los `:hover` están en el bloque `@media (hover: hover) and (pointer: fine)` de `marfil.css`: añade ahí los nuevos. `prefers-reduced-motion` anula duraciones y retrasos, desactiva la transición entre páginas y deja todo visible.
 
 ### Responsive (ver también §9)
 
@@ -227,7 +229,7 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
 
 1. **Señal de carga:** `document.documentElement.setAttribute('data-ready','1')` al empezar.
 2. **Año del pie:** rellena todos los `[data-year]` con el año actual.
-3. **Revelado al hacer scroll:** `IntersectionObserver` (umbral 0,12, margen inferior −8 %) sobre `.reveal`, que añade `.is-in` una sola vez. Si hay `prefers-reduced-motion` o no existe `IntersectionObserver`, marca todo como visible.
+3. **Revelado al hacer scroll** (los `.stagger` y la cita van en el bloque 8): `IntersectionObserver` (umbral 0,12, margen inferior −8 %) sobre `.reveal`, que añade `.is-in` una sola vez. Si hay `prefers-reduced-motion` o no existe `IntersectionObserver`, marca todo como visible.
 4. **Vídeo bajo demanda:** para cada `a.video-facade[data-video-id]` válido (`/^[A-Za-z0-9_-]{6,20}$/`), añade `role="button"`; al hacer clic (o pulsar **Espacio**; **Enter** ya activa el enlace) sustituye la «fachada» por un `<iframe>` de `https://www.youtube-nocookie.com/embed/<ID>?autoplay=1&rel=0&playsinline=1`, con `title` (de `data-title`), `allow`, `allowFullscreen`, `referrerPolicy` y le da foco. El reproductor **no se carga hasta que el visitante lo pide**; sin JS, el enlace abre YouTube. No hay reproducción automática al cargar la página.
 5. **Formulario de contacto** (`#contact-form`, aviso en `#form-aviso`, botón `#form-submit-btn`): lógica heredada del diseño anterior, conservada:
    - Honeypot `name="website"` (si viene relleno, simula éxito sin enviar).
@@ -242,15 +244,20 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
 7. **Copiar correo:** envuelve cada `.site-footer__mail` / `.contact-mail` en `.mail-copy` y añade `.copy-btn` (estados `idle`/`ok`/`error` y aviso para lectores de pantalla).
 8. **Hora local:** «Banyeres de Mariola, HH:MM» (`Europe/Madrid`) en `.site-footer__bottom`.
 
+9. **Filas escalonadas y cita por palabras** (bloque 8 del archivo).
+10. **Título compartido entre páginas** (bloque 9 del archivo).
+
+El formulario, además, enfoca el campo que falla (`aria-invalid` + `aria-describedby`) y muestra «Enviado ✓» antes de la espera.
+
 Los controles de 6 a 8 se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
 
 ### Script inline del `<head>` y degradación
 
-Cada página incluye un `<script>` en el `<head>` que añade la clase `js` a `<html>`, aplica el tema guardado (`data-theme`, antes de pintar para evitar destellos) y, tras 3 s, añade `reveal-fallback` si `data-ready` no se ha puesto (por si `marfil.js` falla): esa clase fuerza `.reveal` a visible. Resultado: **el contenido principal siempre se ve**, con o sin JS.
+Cada página incluye un `<script>` en el `<head>` que añade la clase `js` a `<html>`, aplica el tema guardado (`data-theme`, antes de pintar para evitar destellos) y, tras 3 s, añade `reveal-fallback` si `data-ready` no se ha puesto (por si `marfil.js` falla): esa clase fuerza `.reveal` y `.stagger` a visibles. El script del `<head>` también recibe la transición entre páginas (`pagereveal`). Resultado: **el contenido principal siempre se ve**, con o sin JS.
 
 ### Lo que NO hay
 
-Ni cursor personalizado, ni scroll secuestrado, ni sonido, ni transición entre páginas (aprobada, pendiente de implementar), ni menú hamburguesa, ni librerías de animación.
+Ni cursor personalizado, ni scroll secuestrado, ni sonido, ni menú hamburguesa, ni librerías de animación.
 
 ---
 
@@ -301,7 +308,7 @@ El sitio no usa imágenes de stock. No hay imágenes en las páginas activas sal
 - Puentes entre facetas: al final de `dev.html` («También edito vídeo») y de `video.html` («También programo»), con el mismo componente `.area`. `about.html` y `batoilogic.html` cierran con filas hacia las áreas.
 - Portada: dos filas `.area` (acceso a las áreas), el destacado enlaza a `batoilogic.html`, la línea de contexto a `about.html`.
 - Contacto accesible desde todas las páginas: enlace en la cabecera + bloque de contacto en el pie.
-- Sin menú móvil, sin transiciones entre páginas, sin scroll suave por JS. Único enlace de ancla interno: `#contenido` (enlace de salto).
+- Sin menú móvil ni scroll suave por JS. La transición entre páginas se describe en §6. Único enlace de ancla interno: `#contenido` (enlace de salto).
 - `youtube.html` redirige a `index.html` (no está en ningún menú).
 
 ---

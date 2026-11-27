@@ -74,8 +74,12 @@
   --r-s: 8px; --r-m: 12px; --r-l: 24px;
 
   /* Movimiento */
-  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --dur:  220ms;
+  --ease:     cubic-bezier(0.22, 0.61, 0.36, 1);   /* hover, foco y revelados */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);       /* entradas con máscara */
+  --dur:       220ms;   /* hover y foco */
+  --dur-slow:  420ms;   /* filas, transición entre páginas */
+  --dur-enter: 600ms;   /* entradas al cargar y filetes */
+  --stagger:    60ms;   /* separación entre elementos escalonados */
 }
 
 /* ── Tema oscuro («Marfil de noche») ─────────────────────────────
@@ -175,7 +179,6 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   text-decoration-thickness: 1px; text-underline-offset: 0.28em;
   transition: text-decoration-color var(--dur), color var(--dur);
 }
-.link:hover { color: var(--clay-deep); text-decoration-color: var(--clay); }
 
 .link-arrow {
   display: inline-flex; align-items: center; gap: var(--s-2);
@@ -186,9 +189,8 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   text-decoration-thickness: 1px; text-underline-offset: 0.28em;
   transition: text-decoration-color var(--dur);
 }
-.link-arrow:hover span:first-child { text-decoration-color: var(--clay); }
 .link-arrow .arrow { transition: transform var(--dur) var(--ease); }
-.link-arrow:hover .arrow { transform: translateX(4px); }
+.link-arrow:focus-visible .arrow { transform: translateX(4px); }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
@@ -198,10 +200,8 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   font-weight: 500; text-decoration: none;
   transition: background-color var(--dur), border-color var(--dur), color var(--dur);
 }
-.btn:hover { background: var(--clay-deep); border-color: var(--clay-deep); }
 .btn[disabled] { opacity: 0.55; cursor: not-allowed; }
 .btn--outline { background: transparent; color: var(--charcoal); border-color: var(--line-strong); }
-.btn--outline:hover { background: var(--sand); border-color: var(--charcoal); }
 
 /* ── Cabecera ────────────────────────────────────────────────── */
 .site-header {
@@ -228,13 +228,11 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   background: var(--clay); transform: scaleX(0); transform-origin: left;
   transition: transform var(--dur) var(--ease);
 }
-.nav a:not(.nav__contact):hover::after,
 .nav a[aria-current]:not(.nav__contact)::after { transform: scaleX(1); }
 .nav__contact {
   padding: 0.5rem 1rem; border: 1px solid var(--line-strong); border-radius: var(--r-s);
   transition: background-color var(--dur), border-color var(--dur);
 }
-.nav__contact:hover { background: var(--sand); border-color: var(--charcoal); }
 .nav__contact[aria-current] { background: var(--charcoal); color: var(--ivory); border-color: var(--charcoal); }
 
 /* ── Entradas de página ──────────────────────────────────────── */
@@ -266,14 +264,13 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   text-decoration: none;
   transition: background-color var(--dur) var(--ease);
 }
-.area:hover { background-color: var(--bone); }
 .area__name {
   font-family: var(--font-display); font-size: var(--fs-area); font-weight: 600;
   line-height: 1; letter-spacing: -0.04em;
 }
 .area__desc { color: var(--stone); max-width: 34ch; }
 .area__arrow { font-size: 1.75rem; line-height: 1; transition: transform var(--dur) var(--ease); }
-.area:hover .area__arrow { transform: translateX(8px); }
+.area:focus-visible .area__arrow { transform: translateX(8px); }
 
 /* ── Proyecto destacado ──────────────────────────────────────── */
 .feature {
@@ -351,7 +348,6 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 0.25em; text-decoration-thickness: 1px;
   overflow-wrap: anywhere; transition: text-decoration-color var(--dur), color var(--dur);
 }
-.site-footer__mail:hover { color: var(--clay-deep); text-decoration-color: var(--clay); }
 .site-footer__links { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); font-size: var(--fs-small); }
 .site-footer__bottom {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3) var(--s-6);
@@ -378,13 +374,22 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   transition: border-color var(--dur), background-color var(--dur);
 }
 .form__input::placeholder { color: var(--stone); opacity: 0.8; }
-.form__input:hover { border-color: var(--charcoal); }
 .form__input:focus-visible { border-color: var(--charcoal); outline: 3px solid var(--clay); outline-offset: 2px; }
-.form__textarea { min-height: 9rem; resize: vertical; }
+.form__textarea { min-height: 9rem; resize: vertical; display: block; }
+/* trazo que crece bajo el campo con el foco (el anillo de foco se mantiene) */
+.form__group { position: relative; }
+.form__group::after {
+  content: ''; position: absolute; left: var(--r-m); right: var(--r-m); bottom: 0; height: 2px;
+  background: var(--clay); transform: scaleX(0); transform-origin: left; pointer-events: none;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.form__group:focus-within::after { transform: scaleX(1); }
+.form__input[aria-invalid="true"] { border-color: var(--error); }
 .form__aviso { min-height: 1.5em; font-size: var(--fs-small); }
 .form__aviso.is-error { color: var(--error); }
 .form__aviso.is-warn  { color: var(--clay-deep); }
 .form__aviso.is-ok    { color: var(--ok); }
+.form__aviso.is-error, .form__aviso.is-warn, .form__aviso.is-ok { animation: rise var(--dur-slow) var(--ease) both; }
 .form__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 
 /* ── Ficha de proyecto (BatoiLOGIC) ──────────────────────────── */
@@ -428,7 +433,7 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   background: var(--charcoal); color: var(--ivory);
   transition: transform var(--dur) var(--ease), background-color var(--dur);
 }
-.video-facade:hover .video-facade__play { transform: scale(1.06); background: var(--clay-deep); }
+.video-facade:focus-visible .video-facade__play { transform: scale(1.06); background: var(--clay-deep); }
 .video-facade:focus-visible { outline-offset: -6px; border-radius: var(--r-l); }
 .video-facade__label {
   position: absolute; left: var(--s-5); bottom: var(--s-4);
@@ -450,7 +455,84 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 /* Revelado al hacer scroll: solo si hay JS; sin JS todo es visible */
 .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
 .js .reveal.is-in { opacity: 1; transform: none; }
-.reveal-fallback .reveal { opacity: 1 !important; transform: none !important; }
+
+/* ── Hero: nombre desde una máscara y frase en dos tiempos ───── */
+/* El relleno con margen negativo evita recortar descendentes. */
+.mask { display: inline-block; vertical-align: top; overflow: hidden; padding: 0.1em 0.06em; margin: -0.1em -0.06em; }
+.mask > span { display: inline-block; animation: mask-up var(--dur-enter) var(--ease-out) both; }
+.mask + .mask > span { animation-delay: 80ms; }
+.mask .dot { display: inline-block; animation: pop 300ms var(--ease-out) 520ms both; }
+.beat { animation: fade var(--dur-slow) var(--ease) 300ms both; }
+.beat--2 { animation-delay: 520ms; }
+@keyframes mask-up { from { transform: translateY(115%); } to { transform: none; } }
+@keyframes pop  { from { opacity: 0; transform: translateY(-0.18em); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Barrido horizontal (título de Edición) ──────────────────── */
+/* La ventana y el texto se mueven en sentidos opuestos: el texto
+   queda quieto y se descubre de izquierda a derecha, como un corte. */
+.wipe__clip { display: block; overflow: hidden; padding-block: 0.12em; margin-block: -0.12em; }
+.wipe__clip, .wipe__text { animation: wipe-clip var(--dur-enter) var(--ease-out) 90ms both; }
+.wipe__text { display: block; animation-name: wipe-text; }
+@keyframes wipe-clip { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes wipe-text { from { transform: translateX(100%); }  to { transform: none; } }
+
+/* ── Filas escalonadas y filetes ─────────────────────────────── */
+/* marfil.js añade .is-in a cada hijo; --i es su turno al entrar. */
+.js .stagger > * {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease), background-color var(--dur) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger)), calc(var(--i, 0) * var(--stagger)), 0s;
+}
+.js .stagger > .is-in { opacity: 1; transform: none; }
+/* el borde real se sustituye por una línea que se dibuja de izquierda a derecha */
+.js .stagger > .row, .js .stagger > .area { position: relative; border-color: transparent; }
+.js .stagger > .row::after, .js .stagger > .area::before {
+  content: ''; position: absolute; left: 0; right: 0; height: 1px; background: var(--line);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-enter) var(--ease-out) calc(var(--i, 0) * var(--stagger));
+}
+.js .stagger > .row::after   { bottom: -1px; }
+.js .stagger > .area::before { top: -1px; }
+.js .stagger > .row.is-in::after, .js .stagger > .area.is-in::before { transform: scaleX(1); }
+/* listas de funciones: en cascada tras su fila */
+.js .stagger .row__list li { opacity: 0; transition: opacity var(--dur-slow) var(--ease) var(--stagger); }
+.js .stagger .is-in .row__list li { opacity: 1; }
+.js .stagger .row__list li:nth-child(2) { transition-delay: calc(var(--stagger) * 2); }
+.js .stagger .row__list li:nth-child(3) { transition-delay: calc(var(--stagger) * 3); }
+.js .stagger .row__list li:nth-child(4) { transition-delay: calc(var(--stagger) * 4); }
+.js .stagger .row__list li:nth-child(n+5) { transition-delay: calc(var(--stagger) * 5); }
+
+/* En filas con enlace, el nombre y la flecha acompañan */
+.row__name { transition: transform var(--dur) var(--ease); }
+.row__arrow { display: inline-block; transition: transform var(--dur) var(--ease); }
+.row:has(.row__link:focus-visible) .row__name { transform: translateX(4px); }
+.row__link:focus-visible .row__arrow { transform: translate(2px, -2px); }
+
+/* ── Cita por palabras (Sobre mí) ────────────────────────────── */
+.quote__word { opacity: 0; transition: opacity var(--dur-slow) var(--ease) calc(var(--i, 0) * 35ms); }
+.quote.is-in .quote__word { opacity: 1; }
+
+/* Si marfil.js no carga, todo visible */
+.reveal-fallback .reveal, .reveal-fallback .stagger > *, .reveal-fallback .stagger .row__list li { opacity: 1 !important; transform: none !important; }
+.reveal-fallback .stagger > .row::after, .reveal-fallback .stagger > .area::before { transform: none !important; }
+
+/* ── Transición entre páginas (View Transitions nativas) ─────── */
+/* Mejora progresiva: sin soporte se navega como siempre. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+.site-header { view-transition-name: site-header; }
+.nav a[aria-current]:not(.nav__contact)::after { view-transition-name: nav-line; }
+/* títulos que viajan: su caja se ajusta al texto para no deformarse */
+[data-vt-title], .page-head h1 { width: fit-content; justify-self: start; }
+.vt-title .page-head h1 { view-transition-name: page-title; }
+::view-transition-group(page-title), ::view-transition-group(nav-line) {
+  animation-duration: var(--dur-slow); animation-timing-function: var(--ease-out);
+}
+/* al llegar con transición no se repiten las entradas */
+.vt-arrive .rise, .vt-arrive .beat, .vt-arrive .mask > span, .vt-arrive .mask .dot,
+.vt-shared .wipe__clip, .vt-shared .wipe__text { animation: none; }
 
 /* ── Cambio de tema ──────────────────────────────────────────── */
 /* El botón lo inserta marfil.js: sin JS no aparece. */
@@ -491,6 +573,20 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 
 @media (hover: hover) and (pointer: fine) {
   .theme-toggle:hover, .copy-btn:hover { background: var(--sand); }
+  .link:hover { color: var(--clay-deep); text-decoration-color: var(--clay); }
+  .link-arrow:hover span:first-child { text-decoration-color: var(--clay); }
+  .link-arrow:hover .arrow { transform: translateX(4px); }
+  .btn:hover:not([disabled]) { background: var(--clay-deep); border-color: var(--clay-deep); }
+  .btn--outline:hover:not([disabled]) { background: var(--sand); border-color: var(--charcoal); }
+  .nav a:not(.nav__contact):hover::after { transform: scaleX(1); }
+  .nav__contact:not([aria-current]):hover { background: var(--sand); border-color: var(--charcoal); }
+  .area:hover { background-color: var(--bone); }
+  .area:hover .area__arrow { transform: translateX(8px); }
+  .row:has(.row__link):hover .row__name { transform: translateX(4px); }
+  .row:hover .row__arrow { transform: translate(2px, -2px); }
+  .site-footer__mail:hover { color: var(--clay-deep); text-decoration-color: var(--clay); }
+  .form__input:hover:not([aria-invalid]) { border-color: var(--charcoal); }
+  .video-facade:hover .video-facade__play { transform: scale(1.06); background: var(--clay-deep); }
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */
@@ -535,11 +631,18 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .feature { border-radius: var(--r-m); }
 }
 
+/* Móviles muy estrechos: los cuatro enlaces siguen en una línea */
+@media (max-width: 360px) {
+  .nav { justify-content: space-between; gap: var(--s-1); }
+  .nav a { font-size: var(--fs-meta); }
+  .nav__contact { padding-inline: 0.5rem; }
+}
+
 /* ── Movimiento reducido ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important; animation-delay: 0ms !important;
-    transition-duration: 0.001ms !important; scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important;
   }
-  .js .reveal { opacity: 1; transform: none; }
+  .js .reveal, .js .stagger > * { opacity: 1; transform: none; }
 }
