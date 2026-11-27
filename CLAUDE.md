@@ -43,6 +43,7 @@ Git: el rediseño Marfil está en el commit `2f480e1`. Tras él hay cambios sin 
 6. **No cambiar el stack** ni instalar dependencias sin permiso.
 7. No cambiar el destinatario del correo, el endpoint de Formspree ni los identificadores de servicios.
 8. Responde en español.
+9. **CV:** antes de sustituir `cv/joan-ferre-cv.pdf`, comprobar texto, aspecto y metadatos: sin teléfono, dirección postal ni fecha de nacimiento. El nombre del archivo no cambia (lo usan `about.html`, `contact.html` y la paleta en `marfil.js`).
 
 Reglas de contenido ya decididas (aplican a cualquier cambio):
 
@@ -60,21 +61,19 @@ Reglas de contenido ya decididas (aplican a cualquier cambio):
 ```
 joanferre/
 ├── index.html · dev.html · video.html · about.html · contact.html · batoilogic.html
-├── youtube.html                  Redirección a index.html (meta refresh + JS)
+├── youtube.html                  Redirección a index.html (meta refresh + JS, noindex)
+├── 404.html                      Página de error (noindex; TODAS sus URL son completas)
 ├── css/
-│   ├── marfil.css                ÚNICA hoja de estilos en uso (tokens + componentes)
-│   ├── style.css, components.css, pages.css, animations.css   HEREDADO, sin uso
+│   └── marfil.css                ÚNICA hoja de estilos (tokens + componentes)
 ├── js/
-│   ├── marfil.js                 ÚNICO script en uso
-│   ├── main.js, nav.js           HEREDADO, sin uso
+│   └── marfil.js                 ÚNICO script
 ├── fonts/                        Bricolage Grotesque e Inter (woff2) + licencias OFL
 ├── sitemap.xml                   Las 6 páginas activas (sin youtube.html)
-├── cv/joan-ferre-cv.pdf          CV (aún sin enlazar en la web)
+├── cv/joan-ferre-cv.pdf          CV enlazado desde Sobre mí, Contacto y la paleta
 ├── images/
 │   ├── og.png                    Imagen al compartir, 1200×630 (estilo Marfil)
 │   ├── favicon/                  ico, 16, 32, apple-touch-icon, android-chrome 192/512
-│   ├── profile.jpg               0 bytes (vacío), no se usa en ninguna página
-│   └── thumbnails/               5 PNG de un uso anterior (~7,3 MB), sin uso
+│   └── profile.jpg               0 bytes (vacío), no se usa en ninguna página
 ├── banner_linkedin/banner_linkedin_joan_v5.html   Generador de banner (1584×396), independiente
 ├── preview-dev/                  Muestras de desarrollo (IGNORADA por git; ver §14)
 ├── .review/                      Capturas de revisión local (IGNORADA por git)
@@ -102,6 +101,7 @@ La URL base `https://joanferrevano.github.io/joanferre/` está escrita **solo** 
 |---|---|
 | `index.html`, `dev.html`, `video.html`, `about.html`, `contact.html`, `batoilogic.html` | `<link rel="canonical">`, `og:url`, `og:image` |
 | `index.html` | `url` de los datos estructurados `Person` (JSON-LD) |
+| `404.html` | todos sus `href` y `src` internos (se sirve desde cualquier ruta, no puede usar rutas relativas) |
 | `sitemap.xml` | los `<loc>` |
 
 Todo se cambia en un paso (PowerShell, desde la raíz del repo; sustituye `DOMINIO`):
@@ -281,7 +281,7 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
 9. **Filas escalonadas y cita por palabras** (bloque 8 del archivo).
 10. **Título compartido entre páginas** (bloque 9 del archivo).
 11. **Línea de tiempo** (bloque 10): en las páginas con dos o más `<section id="sec-…" data-clip="Nombre">` (`dev`, `about`, `batoilogic`) inserta `nav.timeline` bajo la cabecera. Cada clip mide en proporción a su sección y enlaza a ella; muestra la sección actual y un cabezal. Con el foco dentro, J y L van a la anterior o siguiente. En móvil (≤640) es una raya fija de 3 px, solo informativa (`inert`). No muestra tiempos ni duraciones.
-12. **Paleta de comandos** (bloque 11): `<dialog>` que se abre con Ctrl+K / ⌘K o con `.palette-toggle` en la cabecera. Ir a páginas y secciones, copiar correo, cambiar tema, abrir GitHub o LinkedIn (solo esas dos redes). Una página nueva se añade a mano a la lista `commands`.
+12. **Paleta de comandos** (bloque 11): `<dialog>` que se abre con Ctrl+K / ⌘K o con `.palette-toggle` en la cabecera. Ir a páginas y secciones, copiar correo, descargar el CV, cambiar tema, abrir GitHub o LinkedIn (solo esas dos redes). Una página nueva se añade a mano a la lista `commands`. Sus rutas se resuelven desde la raíz del sitio (según la ruta de `marfil.js`), para que funcionen en `404.html`.
 
 El formulario, además, enfoca el campo que falla (`aria-invalid` + `aria-describedby`) y muestra «Enviado ✓» antes de la espera.
 
@@ -333,7 +333,6 @@ Decisiones deducibles del código y acordadas con Joan:
 | `fonts/*.woff2` (4) + `OFL-*.txt` | En uso (Bricolage e Inter; licencias incluidas) |
 | `images/favicon/*` | `favicon.ico`, `favicon-32x32.png`, `favicon-16x16.png`, `apple-touch-icon.png` enlazados en el `<head>`; los `android-chrome-*` no se referencian |
 | `images/profile.jpg` | **0 bytes**, sin uso. Pendiente la foto de Joan (prevista solo en Sobre mí, en su proporción natural, sin recorte agresivo) |
-| `images/thumbnails/*.png` (5) | Sin uso. Son imágenes originales de Joan: **no borrar sin permiso** |
 | Vídeos | Ninguno en el repositorio. Los edits se alojarían en YouTube (en oculto) y se incrustarían |
 | `banner_linkedin/…v5.html` | Página independiente (no enlazada) para exportar un banner PNG de 1584×396 |
 
@@ -387,7 +386,7 @@ Añade un `<li class="row">` dentro del `<ul class="rows">` del grupo adecuado, 
 
 ### Modificar estilos
 - Cambia primero el **token** (no el valor en el componente). Si hace falta un nuevo componente, añádelo a `marfil.css` en la sección correspondiente, con `var(--…)` y su comportamiento en los dos `@media`.
-- No introduzcas más colores de acento, sombras, degradados ni efectos. No reutilices clases ni archivos del CSS heredado.
+- No introduzcas más colores de acento, sombras, degradados ni efectos.
 - Tras cualquier cambio de color, **recalcula los contrastes** de las combinaciones usadas.
 
 ### Crear animaciones o interacciones
@@ -400,11 +399,11 @@ No cambies endpoint, destinatario, IDs de campos (`nombre`, `email`, `asunto`, `
 
 ---
 
-## 14. Archivos de apoyo y estado de lo heredado
+## 14. Archivos de apoyo
 
 - **`preview-dev/edicion-componente.html`:** muestra de desarrollo del componente de vídeo (recuadros 16:9 y 9:16 marcados como «muestra», banner superior, `noindex`). Está en `.gitignore`, **no forma parte de la versión publicable**. Enlaza `../css/marfil.css` y `../js/marfil.js`.
 - **`.review/`:** capturas de revisión (ignorada por git).
-- **Código heredado del diseño anterior** (oscuro, con brillo y neón, Playfair Display + DM Sans): `css/style.css`, `css/components.css`, `css/pages.css`, `css/animations.css`, `js/main.js`, `js/nav.js`. Ninguna página los carga. **No los borres ni los enlaces** sin que Joan lo decida; la decisión (archivar, borrar o dejar) sigue pendiente. Tampoco `images/thumbnails/`.
+- **Diseño anterior:** el 27-11-2026, con el OK de Joan, se borraron su CSS (`style`, `components`, `pages`, `animations`), su JS (`main`, `nav`) y las 5 miniaturas de `images/thumbnails/`. Solo quedan en el historial de git.
 - `youtube.html` debe seguir siendo solo una redirección; no restaurar su contenido anterior.
 
 ---
@@ -412,7 +411,7 @@ No cambies endpoint, destinatario, IDs de campos (`nombre`, `email`, `asunto`, `
 ## 15. Estado del contenido
 
 **Publicado (confirmado por Joan):**
-- Experiencia actual: Ondulados del Papel, gestión de pedidos y automatización de procesos, jornada completa, presencial, Banyeres de Mariola, octubre de 2026 – actualidad, con Python y Odoo.
+- Experiencia actual: Ondulados del Papel, gestión de pedidos y automatización de procesos, jornada completa, presencial, Banyeres de Mariola, octubre de 2026 – actualidad, con Python e IA (coincide con el CV).
 - Prácticas anteriores en ARQU (Desarrollo y Automatización con Odoo), marzo de 2026 – junio de 2026, modalidad híbrida, con cinco funciones redactadas en pasado.
 - Formación: Técnico Superior en DAM (CIPFP Batoi, septiembre de 2023 – junio de 2026) con proyecto final BatoiLOGIC; Bachillerato Científico (IES Manuel Broseta, septiembre de 2021 – mayo de 2023); inglés B1 de Cambridge (tal como estaba en la versión anterior).
 - Proyecto principal: BatoiLOGIC. Otros 10 proyectos listados en `dev.html` (Cortador de Silencios, Pausa, Organizador de Fotos y su versión App, Descargar Música de YouTube, Chat PSP, Cubatis, Planetas en VR, CluckRun, Indiana Jones Juego). Pausa y Cubatis se redactaron tras revisar sus repositorios públicos, sin atribuir contribución individual. Macro Tracker se retiró a petición de Joan.
@@ -422,7 +421,8 @@ No cambies endpoint, destinatario, IDs de campos (`nombre`, `email`, `asunto`, `
 - Foto de perfil (`images/profile.jpg` está vacío).
 - Edits de Alemania (existen; faltan enlaces, formato real, títulos, contexto, su trabajo y herramientas). Sin ellos, Edición no tiene piezas.
 - Selección final y datos de contribución de algunos proyectos (en especial los de equipo); posibles demos y capturas.
-- Decisión sobre archivar o borrar el CSS/JS e imágenes heredados.
 - Versión en inglés (otra fase).
+
+LinkedIn público: `https://www.linkedin.com/in/joan-ferre-vano` (confirmado por Joan). Zona pulsable mínima de 24 px en enlaces sueltos (regla `padding-block` en `marfil.css`).
 
 Cuando Joan envíe materiales: incorpora solo lo suficientemente definido, pregunta únicamente por ambigüedades que afecten al resultado, y no bloquees un contenido confirmado porque falte otro independiente.

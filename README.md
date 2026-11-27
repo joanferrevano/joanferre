@@ -13,10 +13,11 @@ Sitio estático (HTML + CSS + JS sin dependencias ni build). Sistema visual «Ma
 | `about.html` | Sobre mí |
 | `contact.html` | Contacto (formulario Formspree) |
 | `youtube.html` | Solo redirige a la portada (meta refresh + JS) para no romper enlaces antiguos. Su contenido anterior está en el historial de git |
+| `404.html` | Página de error. Usa URL completas porque GitHub Pages la sirve desde cualquier ruta |
 
-Recursos del diseño anterior que ya no usa ninguna página (conservados, pendientes de decidir si se archivan): `css/style.css`, `components.css`, `pages.css`, `animations.css`, `js/main.js`, `js/nav.js` e `images/thumbnails/`.
+Todas las rutas son **relativas** (sin `/` inicial) para funcionar tanto en `usuario.github.io` como en `usuario.github.io/repo/`; la excepción es `404.html`.
 
-Todas las rutas son **relativas** (sin `/` inicial) para funcionar tanto en `usuario.github.io` como en `usuario.github.io/repo/`.
+Además: `sitemap.xml`, `images/og.png` (imagen al compartir) y `cv/joan-ferre-cv.pdf`. El cambio a dominio propio está explicado en `CLAUDE.md`.
 
 ## Sistema visual
 

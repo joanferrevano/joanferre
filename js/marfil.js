@@ -620,7 +620,21 @@
     var selected = 0;
     var closeTimer;
 
-    var go = function (url) { return function () { palette.close(); window.location.href = url; }; };
+    /* raíz del sitio según la ruta de este script: 404.html puede mostrarse desde cualquier URL */
+    var ownScript = document.querySelector('script[src$="js/marfil.js"]');
+    var root = ownScript ? ownScript.src.replace(/js\/marfil\.js$/, '') : '';
+    var go = function (url) { return function () { palette.close(); window.location.href = root + url; }; };
+    var download = function (url) {
+      return function () {
+        var link = document.createElement('a');
+        link.href = root + url;
+        link.download = '';
+        palette.close();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+    };
     var external = function (url) { return function () { palette.close(); window.open(url, '_blank', 'noopener'); }; };
 
     var commands = [
@@ -651,9 +665,10 @@
           function () { say('No se pudo copiar. El correo es ' + address); }
         );
       } },
+      { text: 'Descargar CV', group: 'Acción', run: download('cv/joan-ferre-cv.pdf') },
       { text: 'Cambiar tema claro u oscuro', group: 'Acción', run: function () { palette.close(); toggleTheme(); } },
       { text: 'Abrir GitHub', group: 'Pestaña nueva', run: external('https://github.com/joanferrevano') },
-      { text: 'Abrir LinkedIn', group: 'Pestaña nueva', run: external('https://www.linkedin.com/in/joan-ferre-va%C3%B1%C3%B3/') }
+      { text: 'Abrir LinkedIn', group: 'Pestaña nueva', run: external('https://www.linkedin.com/in/joan-ferre-vano') }
     );
 
     /* sin tildes ni mayúsculas: «edicion» encuentra «Edición» */

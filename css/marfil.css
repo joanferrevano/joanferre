@@ -180,6 +180,10 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   transition: text-decoration-color var(--dur), color var(--dur);
 }
 
+/* zona pulsable de al menos 24 px en enlaces sueltos (pie, listas, ruta de la ficha) */
+.site-footer__links a, .site-footer__bottom nav a, .link-list a, .contact-mail, .page-head .meta a { padding-block: var(--s-1); }
+.page-head .meta a { padding-block: 0.3rem; }
+
 .link-arrow {
   display: inline-flex; align-items: center; gap: var(--s-2);
   font-weight: 500; text-decoration: none;
@@ -250,6 +254,7 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .page-head .eyebrow { display: block; margin-bottom: var(--s-5); }
 .page-head h1 { max-width: 14ch; }
 .page-head .lead { margin-top: var(--s-6); }
+.page-head__actions { margin-top: var(--s-6); }
 
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-5); margin-bottom: var(--s-7); }
 
