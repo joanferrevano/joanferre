@@ -294,6 +294,10 @@ Los controles de 6 a 8, la línea de tiempo, la paleta y la demo se crean con JS
 
 Cada página incluye un `<script>` en el `<head>` que añade la clase `js` a `<html>`, aplica el tema guardado (`data-theme`, antes de pintar para evitar destellos) y, tras 3 s, añade `reveal-fallback` si `data-ready` no se ha puesto (por si `marfil.js` falla): esa clase fuerza `.reveal` y `.stagger` a visibles. El script del `<head>` también recibe la transición entre páginas (`pagereveal`). Resultado: **el contenido principal siempre se ve**, con o sin JS.
 
+### Estadísticas (GoatCounter)
+
+Sin cookies, código `joanferre`; panel en `https://joanferre.goatcounter.com`. Las 6 páginas activas y `404.html` cargan `https://gc.zgo.at/count.js` (`async`) justo después de `marfil.js`. `youtube.html` no, para no contar dos veces. El script de GoatCounter no cuenta las visitas desde `localhost` ni `file://`. Una página nueva debe incluirlo. Es el único script de terceros que se carga al abrir una página.
+
 ### Lo que NO hay
 
 Ni cursor personalizado, ni scroll secuestrado, ni sonido, ni menú hamburguesa, ni librerías de animación.
