@@ -35,7 +35,7 @@ Git: el rediseño Marfil está en el commit `2f480e1`. Tras él hay cambios sin 
 
 ## 2. Reglas de trabajo acordadas con Joan (leer primero)
 
-1. **No hacer `git commit`, `git push` ni despliegue sin autorización explícita.** Cada orden de «implementa» se entiende como cambios locales.
+1. **No hacer `git commit`, `git push` ni despliegue sin autorización explícita.** Cada orden de «implementa» se entiende como cambios locales. Los commits y PR van **sin atribución**: nada de `Co-Authored-By` ni de ninguna línea que mencione a Claude.
 2. **No reabrir la dirección creativa.** Marfil está aprobado. Hay que mantener paleta, tipografías, estructura y las pocas interacciones. Solo ajustes de composición necesarios para integrar contenido.
 3. **No inventar contenido**: ni proyectos, ni clientes, ni métricas, ni habilidades, ni fechas, ni funciones, ni tecnologías. Solo se publica lo que Joan confirma. Los campos vacíos, textos entre corchetes o placeholders **no se publican**.
 4. **No presentar una revisión de código como prueba visual o de ejecución.** Distinguir siempre lo implementado de lo realmente comprobado.
