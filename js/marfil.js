@@ -11,6 +11,8 @@
    9. Título compartido en la transición entre páginas.
    10. Línea de tiempo de la página.
    11. Paleta de comandos.
+   12. Demo «cortar silencios».
+   13. Consola y código Konami.
    Los controles de 5 a 7 se crean aquí: sin JS no hay botones muertos.
    ══════════════════════════════════════════════════════════════ */
 (function () {
@@ -741,4 +743,115 @@
     paletteBtn.addEventListener('click', openPalette);
     headerInner.insertBefore(paletteBtn, themeBtn);
   }
+
+  /* ── 12. Demo «cortar silencios» ────────────────────────────── */
+  /* Ilustración de lo que hace el script: no procesa ningún vídeo. */
+  var demoRow = document.querySelector('[data-demo="silencios"]');
+  if (demoRow) {
+    /* tramos en % del ancho: [duración, es silencio] */
+    var parts = [[20, false], [10, true], [16, false], [12, true], [24, false], [8, true], [10, false]];
+    var demo = document.createElement('div');
+    demo.className = 'silence';
+    demo.innerHTML =
+      '<div class="silence__track" aria-hidden="true"></div>' +
+      '<div class="silence__controls">' +
+        '<button class="btn btn--outline" type="button">Cortar silencios</button>' +
+        '<p class="silence__note">Ilustración, no procesa ningún vídeo. El script detecta los silencios ' +
+          'con FFmpeg y une los fragmentos restantes.</p>' +
+      '</div>' +
+      '<p class="sr-only" role="status"></p>';
+
+    var demoTrack = demo.querySelector('.silence__track');
+    var start = 0;
+    var removed = 0;
+    var cuts = 0;
+    var seed = 7;
+    parts.forEach(function (part) {
+      var width = part[0];
+      var block = document.createElement('span');
+      block.style.left = start + '%';
+      block.style.width = width + '%';
+      if (part[1]) {
+        block.className = 'silence__gap';
+        removed += width;
+        cuts++;
+      } else {
+        block.className = 'silence__clip';
+        /* translateX en % es relativo al propio clip; 2px separan los cortes */
+        var joined = removed ? 'calc(' + (-removed / width * 100) + '% + ' + (cuts * 2) + 'px)' : '0px';
+        block.style.setProperty('--shift', joined);
+        var bars = '';
+        for (var x = 2; x < width * 4 - 2; x += 4) {
+          seed = (seed * 37 + 11) % 101;   /* alturas fijas, iguales en cada visita */
+          var h = 8 + seed % 30;
+          bars += '<rect x="' + x + '" y="' + (20 - h / 2) + '" width="2" height="' + h + '"/>';
+        }
+        block.innerHTML = '<svg viewBox="0 0 ' + width * 4 + ' 40" preserveAspectRatio="none" fill="currentColor">' + bars + '</svg>';
+      }
+      demoTrack.appendChild(block);
+      start += width;
+    });
+
+    var demoBtn = demo.querySelector('button');
+    var demoStatus = demo.querySelector('[role="status"]');
+    demoBtn.addEventListener('click', function () {
+      var cut = demo.classList.toggle('is-cut');
+      demoBtn.textContent = cut ? 'Ver el original' : 'Cortar silencios';
+      demoStatus.textContent = cut
+        ? 'Ilustración: silencios cortados y fragmentos unidos.'
+        : 'Ilustración: audio original, con silencios.';
+    });
+    demoRow.appendChild(demo);
+  }
+
+  /* ── 13. Consola y código Konami ────────────────────────────── */
+  if (window.console && console.log) {
+    console.log('Hola, soy Joan. Si miras la consola, quizá te interese mi GitHub: ' +
+      'https://github.com/joanferrevano\n(Y hay algo escondido en el código Konami.)');
+  }
+
+  var KONAMI = 'arrowup arrowup arrowdown arrowdown arrowleft arrowright arrowleft arrowright b a';
+  var typed = [];
+  var montage = null;
+
+  function toggleMontage() {
+    if (montage) {
+      document.body.removeChild(montage);
+      montage = null;
+      announcer.textContent = 'Vista de montaje cerrada';
+      return;
+    }
+    montage = document.createElement('div');
+    montage.className = 'montage';
+    montage.setAttribute('aria-hidden', 'true');
+    montage.innerHTML =
+      '<div class="wrap"><div class="montage__grid">' + new Array(13).join('<span></span>') + '</div></div>' +
+      '<div class="montage__safe"><span>Acción 90 %</span></div>' +
+      '<div class="montage__safe montage__safe--title"><span>Título 80 %</span></div>' +
+      '<p class="montage__help">Vista de montaje. Esc para cerrar.</p>';
+    document.body.appendChild(montage);
+    announcer.textContent = 'Vista de montaje: rejilla y márgenes de seguridad. Escape para cerrar.';
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var target = e.target;
+    /* no actuar al escribir ni con la paleta abierta */
+    if (document.querySelector('dialog[open]') || e.ctrlKey || e.metaKey || e.altKey ||
+        (target.closest && target.closest('input, textarea, select, [contenteditable]'))) {
+      typed = [];
+      return;
+    }
+    if (e.key === 'Escape') {
+      typed = [];
+      if (montage) toggleMontage();
+      return;
+    }
+    if (e.key === 'Shift' || e.repeat) return;
+    typed.push(String(e.key).toLowerCase());
+    typed = typed.slice(-10);
+    if (typed.join(' ') === KONAMI) {
+      typed = [];
+      toggleMontage();
+    }
+  });
 })();

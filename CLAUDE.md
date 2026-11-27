@@ -251,7 +251,10 @@ Un solo archivo (IIFE, `'use strict'`, ES5 + un `async/await` en el formulario).
 
 El formulario, además, enfoca el campo que falla (`aria-invalid` + `aria-describedby`) y muestra «Enviado ✓» antes de la espera.
 
-Los controles de 6 a 8, la línea de tiempo y la paleta se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
+13. **Demo «cortar silencios»** (bloque 12): se añade a la fila con `data-demo="silencios"` de `dev.html`. Es una **ilustración** marcada como tal; solo representa lo que hace el script (detectar silencios con FFmpeg y unir el resto). No añadas cifras de ahorro.
+14. **Consola y Konami** (bloque 13): saludo con el GitHub y, con ↑↑↓↓←→←→BA, una «vista de montaje» (rejilla de 12 columnas y márgenes de seguridad). Se cierra con Esc; se ignora al escribir o con la paleta abierta.
+
+Los controles de 6 a 8, la línea de tiempo, la paleta y la demo se crean con JS (no están en el HTML): sin JS no aparecen botones muertos.
 
 ### Script inline del `<head>` y degradación
 

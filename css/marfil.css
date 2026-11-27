@@ -595,6 +595,39 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
 .palette__status { padding: 0 var(--s-5); font-size: var(--fs-small); color: var(--stone); }
 .palette__status:not(:empty) { padding-block: var(--s-3); border-top: 1px solid var(--line); }
 
+/* ── Demo «cortar silencios» (ilustración, en dev.html) ──────── */
+.silence { grid-column: 2 / -1; display: grid; gap: var(--s-3); margin-top: var(--s-4); }
+.silence__track { position: relative; height: 3.5rem; }
+.silence__clip, .silence__gap { position: absolute; top: 0; bottom: 0; }
+.silence__clip {
+  background: var(--sand); color: var(--stone); border-radius: 4px;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  transition: transform var(--dur-enter) var(--ease-out);
+}
+.silence__clip svg { width: 100%; height: 100%; }
+.silence__gap { transition: opacity var(--dur) var(--ease); }
+.silence__gap::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px dotted var(--line-strong); }
+.silence.is-cut .silence__clip { transform: translateX(var(--shift)); }
+.silence.is-cut .silence__gap { opacity: 0; }
+.silence__controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); }
+.silence__controls .btn { min-width: 12.5rem; font-size: var(--fs-small); }
+.silence__note { flex: 1 1 16rem; font-size: var(--fs-meta); color: var(--stone); }
+
+/* ── Vista de montaje (código Konami) ────────────────────────── */
+/* Rejilla de 12 columnas y márgenes de seguridad de vídeo. */
+.montage { position: fixed; inset: 0; z-index: 90; pointer-events: none; animation: fade var(--dur-slow) var(--ease) both; }
+.montage__grid { height: 100%; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
+.montage__grid span { background: var(--clay); opacity: 0.1; }
+.montage > .wrap { height: 100%; }
+.montage__safe { position: absolute; inset: 5%; border: 1px dashed var(--clay); }
+.montage__safe--title { inset: 10%; }
+.montage__safe span { position: absolute; top: 0; right: 0; padding: 0 var(--s-2); background: var(--ivory); font-size: var(--fs-meta); }
+.montage__help {
+  position: absolute; left: var(--s-4); bottom: var(--s-4); max-width: calc(100% - 2rem);
+  padding: var(--s-2) var(--s-3); background: var(--charcoal); color: var(--ivory);
+  border-radius: var(--r-s); font-size: var(--fs-small);
+}
+
 /* ── Cambio de tema ──────────────────────────────────────────── */
 /* El botón lo inserta marfil.js: sin JS no aparece. */
 .site-header__inner { position: relative; }
@@ -667,7 +700,7 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .contact-grid__info, .contact-grid__form { grid-column: 1 / -1; }
   .context .link-arrow { justify-self: start; }
   .row { grid-template-columns: minmax(0, 1fr) auto; }
-  .row__desc, .row__tech { grid-column: 1 / -1; }
+  .row__desc, .row__tech, .silence { grid-column: 1 / -1; }
   .row__link { grid-column: 2; grid-row: 1; }
   .row--3 { grid-template-columns: minmax(0, 1fr); }
   .row--3 .row__wide { grid-column: 1 / -1; }
@@ -697,6 +730,7 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .nav__contact { padding: 0.5rem 0.75rem; }
   html { scroll-padding-top: 1rem; }
   .form__row { grid-template-columns: 1fr; }
+  .montage__grid { column-gap: var(--s-2); }
   .stack, .facts { grid-template-columns: 1fr; }
   .piece--v { grid-template-columns: 1fr; }
   .piece--v .piece__stage { width: min(100%, 22rem); }
@@ -711,7 +745,7 @@ p  { max-width: var(--w-text); text-wrap: pretty; }
   .nav__contact { padding-inline: 0.5rem; }
 }
 
-@media print { .timeline, .palette-toggle { display: none; } }
+@media print { .timeline, .palette-toggle, .silence, .montage { display: none; } }
 
 /* ── Movimiento reducido ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
